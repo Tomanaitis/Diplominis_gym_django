@@ -1,0 +1,18 @@
+
+
+
+
+
+1 Trainer(name="Alex", surname="Smith", email="alex.smith@example.com", specialization="Strength Training"),
+2 Trainer(name="Jordan", surname="Miller", email="jordan.miller@example.com", specialization="Cardio & Endurance"),
+3 Trainer(name="Taylor", surname="Davis", email="taylor.davis@example.com", specialization="Functional Fitness"),
+
+
+
+4 Trainer(name="Morgan", surname="Brown", email="morgan.brown@example.com", specialization="Powerlifting"),
+5 Trainer(name="Chris", surname="Johnson", email="chris.johnson@example.com", specialization="Bodybuilding"),
+6 Trainer(name="Jamie", surname="Garcia", email="jamie.garcia@example.com", specialization="Weight Loss"),
+7 Trainer(name="Pat", surname="Martinez", email="pat.martinez@example.com", specialization="HIIT"),
+8 Trainer(name="Sam", surname="Wilson", email="sam.wilson@example.com", specialization="Mobility & Flexibility"),
+9 Trainer(name="Riley", surname="Anderson", email="riley.anderson@example.com", specialization="Sports Performance"),
+10 Trainer(name="Casey", surname="Lee", email="casey.lee@example.com", specialization="CrossFit"),

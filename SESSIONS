@@ -1,0 +1,47 @@
+sessions = [
+    TrainingSession(
+        name="Strength & Power Boost",
+        description="This session focuses on building overall strength and power using a combination of
+        compound movements like squats, deadlifts, and bench presses. Participants will go through structured
+        progressive overload training, ensuring gradual muscle growth. The session also includes accessory exercises
+        to improve muscular endurance, core stability, and injury prevention techniques. Ideal for individuals looking
+        to increase strength and power efficiently.",
+        capacity_people=12
+
+
+
+    ),
+    TrainingSession(
+        name="High-Intensity Interval Training (HIIT) Burn",
+        description="A high-energy, fast-paced session designed to maximize fat burn and cardiovascular endurance.
+        This HIIT workout incorporates a mix of bodyweight exercises, kettlebell swings, and sprint intervals to
+        keep the heart rate elevated. Each session is structured with work-rest ratios to push participants to
+        their limits while allowing enough recovery for maximum performance. Suitable for those aiming to
+        improve stamina and overall conditioning.",
+        capacity_people=15
+    ),
+    TrainingSession(
+        name="Mobility & Flexibility Workshop",
+        description="This session is tailored for individuals who want to improve mobility, prevent injuries, and
+        enhance overall body movement. Using a combination of dynamic stretching, joint mobilization drills,
+        and deep tissue release techniques, participants will learn how to move efficiently. This class is
+        beneficial for athletes, lifters, and anyone dealing with stiffness or movement restrictions.",
+        capacity_people=10
+    ),
+    TrainingSession(
+        name="Functional Fitness Challenge",
+        description="A well-rounded session focusing on real-world strength, agility, and endurance. The class
+        includes a variety of functional movements such as kettlebell swings, sled pushes, tire flips, and resistance
+        training. Designed to mimic everyday movements, this class enhances overall physical preparedness while keeping
+        the workouts engaging. A great choice for those wanting to build practical strength and endurance.",
+        capacity_people=20
+    ),
+    TrainingSession(
+        name="Athletic Performance Training",
+        description="A performance-driven session tailored for athletes and sports enthusiasts looking to improve speed,
+        agility, and explosiveness. The workout includes plyometric drills, sprint mechanics, agility ladder exercises,
+        and resistance band work to enhance muscle activation. Whether you're training for a sport or just want to level
+        up your athletic abilities, this session provides structured drills to boost performance.",
+        capacity_people=18
+    )
+]

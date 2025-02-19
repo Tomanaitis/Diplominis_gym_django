@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>TRAINERS</h1>
+<p>All proffesional trainers that are glad to help you</p>
+<ul>
+    {% for trainer_obj in trainers %}
+    <li>
+        <a href="{% url 'trainer-one' trainer_obj.id %}">
+            {{ trainer_obj.first_name }} {{ trainer_obj.last_name }} email: {{ trainer_obj.email }}
+            specialization: {{ trainer_obj.specialization }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+<p></p>
+
+{% endblock %}

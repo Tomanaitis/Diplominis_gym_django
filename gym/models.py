@@ -148,10 +148,17 @@ class Trainer(models.Model):
     first_name = models.CharField('Name', max_length=50, help_text='Enter your name')
     last_name = models.CharField('Surname', max_length=50, help_text='Enter your surname')
     email = models.CharField('Email', max_length=50, help_text="Enter email adress")
-    specialization = models.TextField('Specialization', max_length=2000, default='Specialization....')
+    specialization = models.CharField('Specialization', max_length=100, default='Specialization....')
+    professional_history = models.TextField('professional_history',
+                                            max_length=2000,
+                                            default='Professional accomplishments...'
+                                            )
 
     def __str__(self):
         return f'{self.first_name} {self.last_name} {self.email} {self.specialization}'
+
+    class Meta:
+        ordering = ('last_name', 'first_name')
 
 
 class TrainerSchedule(models.Model):
