@@ -8,4 +8,11 @@
 <p>Number of available training sessions: {{ num_training_sessions_t }}</p>
 <p>Membership options: {{ num_memberships_t }}</p>
 
+{% if user.username %}
+    <p>Welcome, {{ user.username }}</p>
+{% else %}
+    <p>Welcome, guest</p>
+{% endif %}
+<p>Your visits: {{ num_visits_t }} </p>
+
 {% endblock %}

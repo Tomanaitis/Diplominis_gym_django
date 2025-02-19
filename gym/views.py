@@ -11,9 +11,15 @@ def index(request):
     num_trainers = Trainer.objects.count()
     num_training_sessions = TrainingSession.objects.count()
 
-    context = {'num_trainers_t': num_trainers,
-               'num_memberships_t': num_memberships,
-               'num_training_sessions_t': num_training_sessions}
+    num_visits = request.session.get('num_visits', 1)
+    request.session['num_visits'] = num_visits + 1
+
+    context = {
+                'num_trainers_t': num_trainers,
+                'num_memberships_t': num_memberships,
+                'num_training_sessions_t': num_training_sessions,
+                'num_visits_t': num_visits
+               }
 
     return render(request, 'index.html', context=context)
 
