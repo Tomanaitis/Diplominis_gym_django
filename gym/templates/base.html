@@ -19,10 +19,10 @@
             {% block sidebar %}
             <ul class="sidebar-nav">
                 <li><a href="{% url 'index' %}">Home page</a></li>
-                <li><a href="" class="text-nowrap">Memberships</a></li>
+                <li><a href="{% url 'memberships-all' %}" class="text-nowrap">Memberships</a></li>
                 <li><a href="{% url 'trainers-all' %}" class="text-nowrap">Trainers</a></li> {# jinja komentaras #}
                 <li>
-                    <form action="" method="get" class="form-group">
+                     <form action="{% url 'search' %}" method="get" class="form-group">
                         <input type="text" name="search_text" class="form-control" placeholder="Search" style="min-width: 6rem;">
                     </form>
                 </li>

@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 import datetime
+import PIL
 
 from django.db.models import SET_NULL
 
@@ -112,6 +113,10 @@ class TrainingSession(models.Model):
     description = models.TextField('Description', max_length=2000, default='Sessions description...')
     max_capacity = models.PositiveIntegerField('Capacity', help_text="Enter max capacity")
     schedule = models.ForeignKey(Schedule, on_delete=SET_NULL, null=True)
+    ts_cover = models.ImageField('training_session_cover',
+                                 upload_to='covers/ts_covers',
+                                 null=True,
+                                 blank=True)
 
     def __str__(self):
         return f'{self.name} {self.description} {self.max_capacity}'
@@ -153,6 +158,10 @@ class Trainer(models.Model):
                                             max_length=2000,
                                             default='Professional accomplishments...'
                                             )
+    trainer_cover = models.ImageField('trainer_cover',
+                                      upload_to='covers/trainer_covers',
+                                      null=True,
+                                      blank=True)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name} {self.email} {self.specialization}'
