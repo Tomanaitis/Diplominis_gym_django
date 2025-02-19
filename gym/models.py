@@ -48,7 +48,7 @@ class Membership(models.Model):
         ('a', 'Active'),
         ('e', 'Expired'),
     )
-    status = models.CharField('status',
+    membership_status = models.CharField('status',
                               max_length=1,
                               choices=STATUS_STATUS,
                               default='p',
@@ -71,7 +71,7 @@ class Payment(models.Model):
     membership = models.ForeignKey(Membership, on_delete=SET_NULL, null=True)
 
     def __str__(self):
-        return f'{self.price} {self.payment_date}'
+        return f'{self.price}Eur {self.payment_date}'
 
 
 class Schedule(models.Model):
@@ -98,7 +98,7 @@ class Schedule(models.Model):
     start_date = models.DateField('Start_date', max_length=15, help_text="Enter date",
                                   default=datetime.date.today)
     end_date = models.DateField('End_date', max_length=15, help_text="Enter date",
-                                default=datetime.date)
+                                default=datetime.date.today)
 
     def __str__(self):
         return f'{self.week_day} {self.start_date} {self.end_date}'
