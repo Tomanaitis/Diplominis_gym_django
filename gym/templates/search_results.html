@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Search results</h1>
+<h4>For what you looked for:  <b><i>{{ query_text }}</i></b> rezults:</h4>
+{% if trainer_list %}
+<ul>
+    {% for trainer in trainer_list %}
+        <li>
+            <a href="{% url 'trainer-one' trainer.id %}">
+                {{ trainer.last_name }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Nothing was found..</p>
+{% endif %}
+{% endblock %}
