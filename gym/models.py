@@ -1,7 +1,9 @@
 from django.db import models
+from django.contrib.auth.models import User
+from datetime import datetime, date
+from tinymce.models import HTMLField
+from PIL import Image
 import uuid
-import datetime
-import PIL
 
 from django.db.models import SET_NULL
 
@@ -25,10 +27,8 @@ class Membership(models.Model):
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField('Name', max_length=50)
-    start_date = models.DateField('Start_date', max_length=15, help_text="Enter date",
-                                  default=datetime.date.today)
-    end_date = models.DateField('End_date', max_length=15, help_text="Enter date",
-                                default=datetime.date.today)
+    start_date = models.DateField('Start_date', help_text="Enter start date", default=date.today)
+    end_date = models.DateField('End_date', help_text="Enter end date", default=date.today)
 
     TYPE_STATUS = (
         ('W', 'Weekly'),
@@ -50,12 +50,12 @@ class Membership(models.Model):
         ('e', 'Expired'),
     )
     membership_status = models.CharField('status',
-                              max_length=1,
-                              choices=STATUS_STATUS,
-                              default='p',
-                              blank=True,
-                              help_text="Membership status"
-                              )
+                                         max_length=1,
+                                         choices=STATUS_STATUS,
+                                         default='p',
+                                         blank=True,
+                                         help_text="Membership status"
+                                         )
     client = models.ForeignKey(Client, on_delete=SET_NULL, null=True)
 
     def __str__(self):
@@ -67,8 +67,7 @@ class Payment(models.Model):
     Payments table class representing one payment
     """
     price = models.FloatField('Price', help_text='Enter payment price')
-    payment_date = models.DateField('Payment_date', max_length=15, help_text="Enter date",
-                                    default=datetime.date.today)
+    payment_date = models.DateField('Payment_date', help_text="Enter date", default=date.today)
     membership = models.ForeignKey(Membership, on_delete=SET_NULL, null=True)
 
     def __str__(self):
@@ -96,13 +95,20 @@ class Schedule(models.Model):
                                 help_text="Weekday"
                                 )
 
-    start_date = models.DateField('Start_date', max_length=15, help_text="Enter date",
-                                  default=datetime.date.today)
-    end_date = models.DateField('End_date', max_length=15, help_text="Enter date",
-                                default=datetime.date.today)
+    start_date = models.DateField('Start date', help_text="Enter date",
+                                  default=date.today)
+    end_date = models.DateField('End date', help_text="Enter date",
+                                default=date.today)
+    start_time = models.TimeField('Start time',
+                                  help_text='Enter start time',
+                                  default=lambda: datetime.now().time())
+
+    end_time = models.TimeField('End time',
+                                help_text='Enter End time',
+                                default=lambda: datetime.now().time())
 
     def __str__(self):
-        return f'{self.week_day} {self.start_date} {self.end_date}'
+        return f'{self.week_day} {self.start_date} {self.end_date}, {self.start_time} {self.end_time}'
 
 
 class TrainingSession(models.Model):
@@ -110,7 +116,8 @@ class TrainingSession(models.Model):
     Class respresents tables training session element
     """
     name = models.CharField('Name', max_length=50, help_text='Enter training sessions name')
-    description = models.TextField('Description', max_length=2000, default='Sessions description...')
+    # description = models.TextField('Description', max_length=2000, default='Sessions description...')
+    description = HTMLField()
     max_capacity = models.PositiveIntegerField('Capacity', help_text="Enter max capacity")
     schedule = models.ForeignKey(Schedule, on_delete=SET_NULL, null=True)
     ts_cover = models.ImageField('training_session_cover',
@@ -154,10 +161,11 @@ class Trainer(models.Model):
     last_name = models.CharField('Surname', max_length=50, help_text='Enter your surname')
     email = models.CharField('Email', max_length=50, help_text="Enter email adress")
     specialization = models.CharField('Specialization', max_length=100, default='Specialization....')
-    professional_history = models.TextField('professional_history',
-                                            max_length=2000,
-                                            default='Professional accomplishments...'
-                                            )
+    # professional_history = models.TextField('professional_history',
+    #                                         max_length=2000,
+    #                                         default='Professional accomplishments...'
+    #                                         )
+    professional_history = HTMLField()
     trainer_cover = models.ImageField('trainer_cover',
                                       upload_to='covers/trainer_covers',
                                       null=True,
@@ -176,3 +184,18 @@ class TrainerSchedule(models.Model):
     """
     schedule = models.ForeignKey(Schedule, on_delete=SET_NULL, null=True)
     trainer = models.ForeignKey(Trainer, on_delete=SET_NULL, null=True)
+
+
+class Profile(models.Model):
+    picture = models.ImageField(upload_to='profile_pics', default='default-user.png')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+
+    def __str__(self):
+        return f'{self.user.username} profile'
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.picture.path)
+        thumb_size = (150, 150)
+        img.thumbnail(thumb_size)
+        img.save(self.picture.path)

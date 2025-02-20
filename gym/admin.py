@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Client, Membership, Payment, Schedule, TrainerSchedule, Trainer, TrainingSession, Reservation
+from .models import (Client, Membership, Payment, Schedule, TrainerSchedule, Trainer, TrainingSession, Reservation,
+                     Profile)
 
 
 class TrainerScheduleInline(admin.TabularInline):
@@ -56,3 +57,4 @@ admin.site.register(TrainingSession, TrainingSessionAdmin)
 admin.site.register(TrainerSchedule)
 admin.site.register(Trainer, TrainerAdmin)
 admin.site.register(Reservation, ReservationsAdmin)
+admin.site.register(Profile)

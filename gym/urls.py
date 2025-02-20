@@ -8,4 +8,6 @@ urlpatterns = [
     path('memberships/', views.MembershipListView.as_view(), name='memberships-all'),
     path('memebership/<uuid:pk>', views.MembershipDetailView.as_view(), name='membership-one'),
     path('search/', views.search, name='search'),
+    path('register/', views.register_user, name='register'),
+    path('profile/', views.get_user_profile, name='user-profile')
 ]

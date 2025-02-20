@@ -56,7 +56,7 @@
 
            {% if user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href="">
+              <a class="nav-link" href="{% url 'user-profile' %}">
                  <svg class="bi bi-person"
                          width="1.5em"
                          height="1.5em"
@@ -76,6 +76,9 @@
           {% else %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">Login</a>
+            </li>
+              <li class="nav-item">
+              <a class="nav-link" href="{% url 'register' %}?next={{ request.path }}">Register</a>
             </li>
           {% endif %}
 
@@ -108,6 +111,14 @@
         </div>
            </div>
     </nav>
+    {% for message in messages %}
+    <div class="alert {% if message.tags == 'error' %} alert-danger
+                      {% else %} alert-success
+                      {% endif %}"
+         role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
     <div class="container">{% block content %}{% endblock %}</div>
     <script
       src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
