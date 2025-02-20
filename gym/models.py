@@ -31,13 +31,14 @@ class Client(models.Model):
     """
     class for clients table reprezenting one client
     """
-    first_name = models.CharField('Name', max_length=50, help_text='Enter your name')
-    last_name = models.CharField('Surname', max_length=50, help_text='Enter your surname')
-    email = models.EmailField('Email', max_length=50, help_text="Enter email adress")
+    # first_name = models.CharField('Name', max_length=50, help_text='Enter your name')
+    # last_name = models.CharField('Surname', max_length=50, help_text='Enter your surname')
+    # email = models.EmailField('Email', max_length=50, help_text="Enter email adress")
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='client')
     phone_number = models.CharField('Phone_number', max_length=20, help_text='Enter your phone number')
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name} {self.email} {self.phone_number}'
+        return f'{self.profile.user.firs_name} {self.profile.user.last_name}'
 
 
 class Membership(models.Model):

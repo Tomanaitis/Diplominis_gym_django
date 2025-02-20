@@ -87,9 +87,15 @@ def register_user(request):
     elif request.method == 'POST':
 
         username = request.POST.get('username')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
         email = request.POST.get('email')
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
+
+        if not first_name or not last_name:
+            messages.error(request, 'First name and Last name are required.')
+            return redirect('register')
 
         if not check_password(password):
             messages.error(request, 'Password must be more than 5 symbols')
@@ -107,7 +113,11 @@ def register_user(request):
             messages.error(request, f'Email {email} jau užregistruotas')
             return redirect('register')
 
-        User.objects.create_user(username=username, email=email, password=password)
+        User.objects.create_user(username=username,
+                                 email=email,
+                                 password=password,
+                                 first_name=first_name,
+                                 last_name=last_name)
         messages.info(request, f'Vartotojas {username} užregistruotas!')
         return redirect('login')
 
