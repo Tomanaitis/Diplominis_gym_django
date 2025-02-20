@@ -1,13 +1,13 @@
-from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 from django.db.models import Q
 from django.core.paginator import Paginator
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 
 from .models import TrainingSession, Membership, Trainer, User
+from .forms import ProfileUpdateForm, UserUpdateForm
 from .utils import check_password
 
 
@@ -63,6 +63,12 @@ class TrainerListView(generic.ListView):
     paginate_by = 1
 
 
+class TrainingSessionListView(generic.ListView):
+    model = TrainingSession
+    context_object_name = 'trainingsession_list'
+    template_name = 'training_sessions.html'
+
+
 def search(request):
     query_text = request.GET.get('search_text')
     search_results = Trainer.objects.filter(
@@ -109,4 +115,23 @@ def register_user(request):
 @login_required()
 @csrf_protect
 def get_user_profile(request):
-    return render(request, 'profile.html')
+    if request.method == 'POST':
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        if p_form.is_valid() and u_form.is_valid():
+            p_form.save()
+            u_form.save()
+            messages.info(request, "Your profile changes have been successfully saved.")
+        else:
+            messages.error(request, "Profile changes unsuccessful.")
+        return redirect('user-profile')
+
+    p_form = ProfileUpdateForm(instance=request.user.profile)
+    u_form = UserUpdateForm(instance=request.user)
+
+    context = {
+        'p_form': p_form,
+        'u_form': u_form
+    }
+
+    return render(request, 'profile.html', context=context)

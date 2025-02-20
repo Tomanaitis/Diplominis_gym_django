@@ -1,12 +1,22 @@
 from django.contrib import admin
 
 from .models import (Client, Membership, Payment, Schedule, TrainerSchedule, Trainer, TrainingSession, Reservation,
-                     Profile)
+                     Profile, )
 
 
 class TrainerScheduleInline(admin.TabularInline):
     model = TrainerSchedule
     extra = 1
+
+
+class ReservationsInline(admin.TabularInline):
+    model = Reservation
+    extra = 1
+
+
+class TrainerScheduleAdmin(admin.ModelAdmin):
+    list_display = ('trainer', 'schedule')
+    inlines = [ReservationsInline]
 
 
 class TrainingSessionAdmin(admin.ModelAdmin):
@@ -29,8 +39,8 @@ class ClientAdmin(admin.ModelAdmin):
 
 
 class ScheduleAdmin(admin.ModelAdmin):
-    list_display = ('week_day', 'start_date', 'end_date')
-    list_editable = ('start_date', 'end_date')
+    list_display = ('week_day', 'start_date', 'start_time', 'end_date', 'end_time')
+    list_editable = ('start_date', 'end_date', 'start_time', 'end_time')
     search_fields = ('week_day', 'start_date', 'end_date')
 
 
@@ -40,8 +50,12 @@ class MembershipAdmin(admin.ModelAdmin):
 
 
 class ReservationsAdmin(admin.ModelAdmin):
-    list_display = ('client', 'rezervation_status', 'training_session')
+    list_display = ('client', 'rezervation_status')
     list_editable = ('rezervation_status',)
+
+    # def get_training_session_name(self, obj):
+    #     return obj.training_session.name
+    # get_training_session_name.short_description = 'Training Session'
 
 
 class PaymentAdmin(admin.ModelAdmin):
@@ -54,7 +68,6 @@ admin.site.register(Membership, MembershipAdmin)
 admin.site.register(Payment, PaymentAdmin)
 admin.site.register(Schedule, ScheduleAdmin)
 admin.site.register(TrainingSession, TrainingSessionAdmin)
-admin.site.register(TrainerSchedule)
 admin.site.register(Trainer, TrainerAdmin)
 admin.site.register(Reservation, ReservationsAdmin)
 admin.site.register(Profile)

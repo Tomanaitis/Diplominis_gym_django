@@ -8,6 +8,25 @@ import uuid
 from django.db.models import SET_NULL
 
 
+def get_current_time():
+    return datetime.now().time()
+
+
+class Profile(models.Model):
+    picture = models.ImageField(upload_to='profile_pics', default='default-user.png')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+
+    def __str__(self):
+        return f'{self.user.username} profile'
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.picture.path)
+        thumb_size = (150, 150)
+        img.thumbnail(thumb_size)
+        img.save(self.picture.path)
+
+
 class Client(models.Model):
     """
     class for clients table reprezenting one client
@@ -56,7 +75,7 @@ class Membership(models.Model):
                                          blank=True,
                                          help_text="Membership status"
                                          )
-    client = models.ForeignKey(Client, on_delete=SET_NULL, null=True)
+    client = models.ForeignKey(Client, on_delete=SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f'{self.name} {self.start_date} {self.end_date} {self.membership_type}'
@@ -68,10 +87,10 @@ class Payment(models.Model):
     """
     price = models.FloatField('Price', help_text='Enter payment price')
     payment_date = models.DateField('Payment_date', help_text="Enter date", default=date.today)
-    membership = models.ForeignKey(Membership, on_delete=SET_NULL, null=True)
+    membership = models.ForeignKey(Membership, on_delete=SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.price}Eur {self.payment_date}'
+        return f'{self.price} EUR on {self.payment_date}'
 
 
 class Schedule(models.Model):
@@ -101,56 +120,14 @@ class Schedule(models.Model):
                                 default=date.today)
     start_time = models.TimeField('Start time',
                                   help_text='Enter start time',
-                                  default=lambda: datetime.now().time())
+                                  default=get_current_time)
 
     end_time = models.TimeField('End time',
                                 help_text='Enter End time',
-                                default=lambda: datetime.now().time())
+                                default=get_current_time)
 
     def __str__(self):
         return f'{self.week_day} {self.start_date} {self.end_date}, {self.start_time} {self.end_time}'
-
-
-class TrainingSession(models.Model):
-    """
-    Class respresents tables training session element
-    """
-    name = models.CharField('Name', max_length=50, help_text='Enter training sessions name')
-    # description = models.TextField('Description', max_length=2000, default='Sessions description...')
-    description = HTMLField()
-    max_capacity = models.PositiveIntegerField('Capacity', help_text="Enter max capacity")
-    schedule = models.ForeignKey(Schedule, on_delete=SET_NULL, null=True)
-    ts_cover = models.ImageField('training_session_cover',
-                                 upload_to='covers/ts_covers',
-                                 null=True,
-                                 blank=True)
-
-    def __str__(self):
-        return f'{self.name} {self.description} {self.max_capacity}'
-
-
-class Reservation(models.Model):
-    """
-    Reservations table class representing one reservation
-    """
-
-    RESERVATION_STATUS = (
-        ('p', 'Processing'),
-        ('r', 'Reserved'),
-        ('e', 'Unavailable'),
-    )
-    rezervation_status = models.CharField('rezervation_status',
-                                          max_length=1,
-                                          choices=RESERVATION_STATUS,
-                                          default='p',
-                                          blank=True,
-                                          help_text="Membership status"
-                                          )
-    client = models.ForeignKey(Client, on_delete=SET_NULL, null=True)
-    training_session = models.ForeignKey(TrainingSession, on_delete=SET_NULL, null=True)
-
-    def __str__(self):
-        return f'{self.rezervation_status}'
 
 
 class Trainer(models.Model):
@@ -178,24 +155,55 @@ class Trainer(models.Model):
         ordering = ('last_name', 'first_name')
 
 
+class TrainingSession(models.Model):
+    """
+    Class respresents tables training session element
+    """
+    name = models.CharField('Name', max_length=50, help_text='Enter training sessions name')
+    description = HTMLField()
+    max_capacity = models.PositiveIntegerField('Capacity', help_text="Enter max capacity")
+    schedule = models.ForeignKey(Schedule, on_delete=SET_NULL, null=True, blank=True)
+    trainer = models.ForeignKey(Trainer, on_delete=models.CASCADE, related_name='sessions')
+    ts_cover = models.ImageField('training_session_cover',
+                                 upload_to='covers/ts_covers',
+                                 null=True,
+                                 blank=True)
+
+    def __str__(self):
+        return f'{self.name}  {self.max_capacity}'
+
+
 class TrainerSchedule(models.Model):
     """
     Class representing the trainer's schedule.
     """
-    schedule = models.ForeignKey(Schedule, on_delete=SET_NULL, null=True)
-    trainer = models.ForeignKey(Trainer, on_delete=SET_NULL, null=True)
+    schedule = models.ForeignKey(Schedule, on_delete=SET_NULL, null=True, blank=True)
+    trainer = models.ForeignKey(Trainer, on_delete=SET_NULL, null=True, blank=True)
 
 
-class Profile(models.Model):
-    picture = models.ImageField(upload_to='profile_pics', default='default-user.png')
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+class Reservation(models.Model):
+    """
+    Reservations table class representing one reservation
+    """
+
+    RESERVATION_STATUS = (
+        ('p', 'Processing'),
+        ('r', 'Reserved'),
+        ('e', 'Unavailable'),
+    )
+    rezervation_status = models.CharField('rezervation_status',
+                                          max_length=1,
+                                          choices=RESERVATION_STATUS,
+                                          default='p',
+                                          blank=True,
+                                          help_text="Membership status"
+                                          )
+    client = models.ForeignKey(Client, on_delete=SET_NULL, null=True, blank=True)
+    training_session = models.ForeignKey(TrainingSession,
+                                         on_delete=SET_NULL,
+                                         null=True,
+                                         blank=True,
+                                         related_name='reservations')
 
     def __str__(self):
-        return f'{self.user.username} profile'
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        img = Image.open(self.picture.path)
-        thumb_size = (150, 150)
-        img.thumbnail(thumb_size)
-        img.save(self.picture.path)
+        return f'{self.rezervation_status}'
