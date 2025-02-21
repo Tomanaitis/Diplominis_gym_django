@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.views import generic
 from django.db.models import Q
 from django.core.paginator import Paginator
@@ -6,10 +6,10 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth.mixins import LoginRequiredMixin
+# from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import TrainingSession, Membership, Trainer, Reservation
-from .forms import ProfileUpdateForm, UserUpdateForm
+from .models import TrainingSession, Membership, Trainer, DisplayMembership
+from .forms import ProfileUpdateForm, UserUpdateForm, TrainingSessionReviewForm
 from .utils import check_password
 
 
@@ -58,6 +58,18 @@ class MembershipDetailView(generic.DetailView):
     template_name = 'membership.html'
 
 
+class DisplayMembershipListView(generic.ListView):
+    model = DisplayMembership
+    context_object_name = 'displaymembership_list'
+    template_name = 'display_memberships.html'
+
+
+class DisplayMembershipDetailView(generic.DetailView):
+    model = DisplayMembership
+    context_object_name = 'displaymembership'
+    template_name = 'display_membership.html'
+
+
 class TrainerListView(generic.ListView):
     model = Trainer
     context_object_name = 'trainer_list'
@@ -69,6 +81,39 @@ class TrainingSessionListView(generic.ListView):
     model = TrainingSession
     context_object_name = 'trainingsession_list'
     template_name = 'training_sessions.html'
+
+
+class TrainingSessionDetailView(generic.edit.FormMixin, generic.DetailView):
+    model = TrainingSession
+    context_object_name = 'trainingsession'
+    template_name = 'training_session.html'
+    form_class = TrainingSessionReviewForm
+
+    def post(self, request, *args, **kwargs):
+        """
+        skirta tik darbui su paciu post uzsklausa
+        """
+        form = self.get_form()  # TrainingSessionReviewForm instance
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        """
+        skirtas duomenu issaugojimui is views is formos gautu, validacijos metu mes irasom training sessiona ir useri
+        """
+        self.training_session_object = self.get_object() #
+        form.instance.training_session = self.training_session_object
+        form.instance.reviewer = self.request.user
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        """
+        were browser gonna go after successesful form post
+        """
+        return reverse('trainingsession-one', kwargs={'pk': self.training_session_object.id})
 
 
 def search(request):
@@ -148,11 +193,3 @@ def get_user_profile(request):
     }
 
     return render(request, 'profile.html', context=context)
-
-# class ReservationsByUserListView(LoginRequiredMixin, generic.ListView):
-#     model = Reservation
-#     context_object_name = 'reservation_list'
-#     template_name = 'user_reservations.html'
-#
-#     def get_queryset(self):
-#         return Reservation.objects.filter()

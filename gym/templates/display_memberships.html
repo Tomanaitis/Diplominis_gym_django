@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Available memberhsips</h1>
+<ul>
+    {% for display_membership in displaymembership_list %}
+    <li><a href="{% url 'displaymembership-one' display_membership.id %}">
+        {{ display_membership }}  EUR/Month</a>
+    </li>
+    {% endfor %}
+</ul>
+
+
+<p></p>
+
+{% endblock %}

@@ -43,6 +43,8 @@ class Membership(models.Model):
     start_date = models.DateField('Start_date', help_text="Enter start date", default=date.today)
     end_date = models.DateField('End_date', help_text="Enter end date", default=date.today)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='membership')
+    profile = models.ForeignKey(Profile, on_delete=SET_NULL, null=True, blank=True, default=None)
+    description = HTMLField()
     TYPE_STATUS = (
         ('B', 'Basic'),
         ('F', 'Flexible'),
@@ -69,11 +71,22 @@ class Membership(models.Model):
                                          blank=True,
                                          help_text="Membership status"
                                          )
-    profile = models.ForeignKey(Profile, on_delete=SET_NULL, null=True, blank=True, default=None)
-    description = HTMLField()
 
     def __str__(self):
         return f'{self.membership_type} {self.start_date} - {self.end_date}'
+
+
+class DisplayMembership(models.Model):
+    """
+    class for membership table reprezenting on membership for display
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    name = models.CharField('Name', max_length=50)
+    price = models.FloatField('Price EUR', help_text='Enter membership price')
+    description = HTMLField()
+
+    def __str__(self):
+        return f'{self.name} {self.price}'
 
 
 class Payment(models.Model):
@@ -205,3 +218,16 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f'{self.rezervation_status}'
+
+
+class TrainingSessionReview(models.Model):
+    """
+    Class for user reviews
+    """
+    date_created = models.DateTimeField(auto_now_add=True)
+    content = models.TextField('Review', max_length=2000)
+    training_session = models.ForeignKey(TrainingSession, on_delete=models.CASCADE, blank=True)
+    reviewer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.date_created}, {self.reviewer}, {self.training_session} {self.content[:50]}'

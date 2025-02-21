@@ -8,16 +8,18 @@
     {% for trainer_obj in trainers %}
     <li>
         <a href="{% url 'trainer-one' trainer_obj.id %}" class="trainer-card">
-            <div class="trainer-image-wrapper">
+        <h3>{{ trainer_obj.first_name }} {{ trainer_obj.last_name }}</h3></a>
+    <div class="trainer-info">
+        <p>Specialization: {{ trainer_obj.specialization }}</p>
+
+        <div class="trainer-image-wrapper">
                 {% if trainer_obj.cover %}
                     <img src="{{ trainer_obj.cover.url }}" class="trainer-image img-fluid"/>
                 {% else %}
                     <img src="{% static 'img/no-image.png' %}" class="trainer-image img-fluid"/>
                 {% endif %}
-            </div>
-        <h3>{{ trainer_obj.first_name }} {{ trainer_obj.last_name }}</h3></a>
-    <div class="trainer-info">
-        <p>Specialization: {{ trainer_obj.specialization }}</p>
+        </div>
+
         <hr>
     </div>
     </li>

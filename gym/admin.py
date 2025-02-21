@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (Membership, Payment, Schedule, TrainerSchedule, Trainer, TrainingSession, Reservation,
-                     Profile)
+                     Profile, DisplayMembership, TrainingSessionReview)
 
 
 class TrainerScheduleInline(admin.TabularInline):
@@ -58,6 +58,11 @@ class PaymentAdmin(admin.ModelAdmin):
     list_editable = ('payment_date', 'membership', 'price', 'payment_status')
 
 
+class DisplayMembershipAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price')
+    list_editable = ('price',)
+
+
 admin.site.register(Membership, MembershipAdmin)
 admin.site.register(Payment, PaymentAdmin)
 admin.site.register(Schedule, ScheduleAdmin)
@@ -65,4 +70,5 @@ admin.site.register(TrainingSession, TrainingSessionAdmin)
 admin.site.register(Trainer, TrainerAdmin)
 admin.site.register(Reservation, ReservationsAdmin)
 admin.site.register(Profile, ProfileAdmin)
-
+admin.site.register(DisplayMembership, DisplayMembershipAdmin)
+admin.site.register(TrainingSessionReview)

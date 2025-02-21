@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h1>training session detail view:</h1>
+<h2>{{ trainingsession.name }}</h2>
+<hr>
+  <div class="">
+    {% if trainingsession.ts_cover %}
+        <img src="{{ trainingsession.ts_cover.url }}" class="trainingsession-image img-fluid"/>
+    {% else %}
+        <img src="{% static 'img/no-image.png' %}" class="trainingsession-image img-fluid"/>
+    {% endif %}
+  </div>
+<hr>
+<h6>{{ trainingsession.description|safe }}</h6>
+{% if user.is_authenticated %}
+<div>
+    <h5>Leave a review about training session:</h5>
+      <form method="post">
+      {% csrf_token %}
+      {{ form.content }}
+        <div>
+          <input type="submit" class="btn btn-outline-success btn-sm" value="Išsaugoti komentarą"/>
+        </div>
+      </form>
+</div>
+{% endif %}
+<hr/>
+{% for trainingsession in trainingsession.trainingsessionreview_set.all %}
+  <small><b>{{ trainingsession.reviewer }}</b> <em>{{ trainingsession.date_created }}</em></small>
+    <p class="bg-light">{{ trainingsession.content }}</p>
+<hr/>
+{% endfor %}
+  {% if not trainingsession.trainingsessionreview_set.first %}
+    <p>Training session has no reviews...</p>
+<hr/>
+  {% endif %}
+
+{% endblock %}
