@@ -1,12 +1,25 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 <h1>Vilnius gym available training sessions</h1>
 
 
 <ul>
     {% for trainingsession in trainingsession_list %}
-    <li>{{ trainingsession.name }} {{ trainingsession.description|safe }}</li>
+    <li>
+        <h4>{{ trainingsession.name }}</h4>
+        <a>
+            <div class="">
+                {% if trainingsession.ts_cover %}
+                    <img src="{{ trainingsession.ts_cover.url }}" class="trainingsession-image img-fluid"/>
+                {% else %}
+                    <img src="{% static 'img/no-image.png' %}" class="trainingsession-image img-fluid"/>
+                {% endif %}
+        </a>
+        <h6>{{ trainingsession.description|safe }}</h6>
+
+
+    </li>
     {% endfor %}
 
 

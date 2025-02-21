@@ -42,9 +42,9 @@ class Membership(models.Model):
     end_date = models.DateField('End_date', help_text="Enter end date", default=date.today)
 
     TYPE_STATUS = (
-        ('W', 'Weekly'),
-        ('M', 'Monthly'),
-        ('Y', 'Yearly'),
+        ('B', 'Basic'),
+        ('F', 'Flexible'),
+        ('P', 'Premium'),
         ('T', 'Trial'),
     )
     membership_type = models.CharField('type',
@@ -132,10 +132,6 @@ class Trainer(models.Model):
     email = models.CharField('Email', max_length=50, help_text="Enter email adress")
     specialization = models.CharField('Specialization', max_length=100, default='Specialization....')
     professional_history = HTMLField()
-    trainer_cover = models.ImageField('trainer_cover',
-                                      upload_to='covers/trainer_covers',
-                                      null=True,
-                                      blank=True)
     cover = models.ImageField(upload_to='covers/trainer_covers', blank=True, null=True)
 
     def __str__(self):
@@ -154,7 +150,7 @@ class TrainingSession(models.Model):
     max_capacity = models.PositiveIntegerField('Capacity', help_text="Enter max capacity")
     schedule = models.ForeignKey(Schedule, on_delete=SET_NULL, null=True, blank=True)
     trainer = models.ForeignKey(Trainer, on_delete=models.CASCADE, related_name='sessions')
-    ts_cover = models.ImageField('training_session_cover',
+    ts_cover = models.ImageField('training session cover',
                                  upload_to='covers/ts_covers',
                                  null=True,
                                  blank=True)

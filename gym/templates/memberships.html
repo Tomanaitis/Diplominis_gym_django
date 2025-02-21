@@ -5,7 +5,8 @@
 <ul>
     {% for membership in membership_list %}
     <li><a href="{% url 'membership-one' membership.id %}">
-        {{ membership }}</a>
+        {{ membership.name }}</a>
+
     </li>
     {% endfor %}
 </ul>

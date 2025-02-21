@@ -21,16 +21,21 @@
 {% endif %}
 <ul>
     {% for trainer_obj in trainers %}
+
     <li>
-        <a href="{% url 'trainer-one' trainer_obj.id %}">
-            {{ trainer_obj.first_name }} {{ trainer_obj.last_name }} email: {{ trainer_obj.email }}
-            specialization: {{ trainer_obj.specialization }}
-            {% if trainer_obj.cover %}
-                <img src="{{ trainer_obj.cover.url }}" style="width: 40%;" class="img-fluid"/>
-            {% else %}
-                <img src="{% static 'img/no-image.png' %}" style="width: 40%;" class="img-fluid"/>
-            {% endif %}
-        </a>
+        <a href="{% url 'trainer-one' trainer_obj.id %}" class="trainer-card">
+            <div class="trainer-image-wrapper">
+                {% if trainer_obj.cover %}
+                    <img src="{{ trainer_obj.cover.url }}" class="trainer-image img-fluid"/>
+                {% else %}
+                    <img src="{% static 'img/no-image.png' %}" class="trainer-image img-fluid"/>
+                {% endif %}
+            </div>
+        <h3>{{ trainer_obj.first_name }} {{ trainer_obj.last_name }}</h3></a>
+    <div class="trainer-info">
+        <p>Specialization: {{ trainer_obj.specialization }}</p>
+        <hr>
+    </div>
     </li>
     {% endfor %}
 </ul>

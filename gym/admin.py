@@ -20,8 +20,8 @@ class TrainerScheduleAdmin(admin.ModelAdmin):
 
 
 class TrainingSessionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'max_capacity', 'description', 'schedule')
-    list_editable = ('max_capacity', 'schedule')
+    list_display = ('name', 'max_capacity', 'schedule', 'trainer')
+    list_editable = ('max_capacity', 'schedule', 'trainer')
     search_fields = ('name', 'description')
 
 
