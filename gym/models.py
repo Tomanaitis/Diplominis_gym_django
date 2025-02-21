@@ -40,10 +40,9 @@ class Membership(models.Model):
     class for membership table reprezenting on membership
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    name = models.CharField('Name', max_length=50)
     start_date = models.DateField('Start_date', help_text="Enter start date", default=date.today)
     end_date = models.DateField('End_date', help_text="Enter end date", default=date.today)
-
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='membership')
     TYPE_STATUS = (
         ('B', 'Basic'),
         ('F', 'Flexible'),
@@ -70,11 +69,11 @@ class Membership(models.Model):
                                          blank=True,
                                          help_text="Membership status"
                                          )
-    # profile = models.ForeignKey(Profile, on_delete=SET_NULL, null=True, blank=True)
+    profile = models.ForeignKey(Profile, on_delete=SET_NULL, null=True, blank=True, default=None)
     description = HTMLField()
 
     def __str__(self):
-        return f'{self.name} {self.start_date} - {self.end_date}'
+        return f'{self.membership_type} {self.start_date} - {self.end_date}'
 
 
 class Payment(models.Model):
@@ -85,11 +84,12 @@ class Payment(models.Model):
     payment_date = models.DateField('Payment_date', help_text="Enter date", default=date.today)
     membership = models.ForeignKey(Membership, on_delete=SET_NULL, null=True, blank=True)
     profile = models.ForeignKey(Profile, on_delete=SET_NULL, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='payment')
 
     PAYMENT_STATUS = (
         ('p', 'Processing'),
-        ('a', 'Active'),
-        ('e', 'Expired'),
+        ('a', 'Paid'),
+        ('e', 'Expired '),
     )
     payment_status = models.CharField('status',
                                       max_length=1,
@@ -101,58 +101,6 @@ class Payment(models.Model):
 
     def __str__(self):
         return f'{self.price} EUR on {self.payment_date} {self.membership} {self.profile}'
-
-
-class Schedule(models.Model):
-    """
-    Class representing tables schedule
-    """
-    WEEK_DAY_STATUS = (
-        ('1', 'Monday'),
-        ('2', 'Tuesday'),
-        ('3', 'Wednesday'),
-        ('4', 'Thursday'),
-        ('5', 'Friday'),
-        ('6', 'Saturday'),
-        ('7', 'Sunday'),
-    )
-    week_day = models.CharField('Weekday',
-                                max_length=1,
-                                choices=WEEK_DAY_STATUS,
-                                default='1',
-                                blank=True,
-                                help_text="Weekday"
-                                )
-
-    date = models.DateField('date', help_text="Enter date",
-                            default=date.today)
-
-    start_time = models.TimeField('Start time',
-                                  help_text='Enter start time',
-                                  default=get_current_time)
-
-    end_time = models.TimeField('End time',
-                                help_text='Enter End time',
-                                default=get_current_time)
-
-    LOCATION_NAME = (
-        ('1', 'Main Studio'),
-        ('2', 'Yoga Room'),
-        ('3', 'Cardio Zone'),
-        ('4', 'Outdoor Terrace'),
-        ('5', 'Functional Training Area'),
-    )
-
-    location = models.CharField('Location',
-                                max_length=1,
-                                choices=LOCATION_NAME,
-                                default='1',
-                                blank=True,
-                                help_text="Gym class locations"
-                                )
-
-    def __str__(self):
-        return f'{self.week_day} {self.date}, {self.start_time} {self.end_time} {self.location}'
 
 
 class Trainer(models.Model):
@@ -167,7 +115,7 @@ class Trainer(models.Model):
     cover = models.ImageField(upload_to='covers/trainer_covers', blank=True, null=True)
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name} {self.email} {self.specialization}'
+        return f'{self.first_name} {self.last_name}'
 
     class Meta:
         ordering = ('last_name', 'first_name')
@@ -190,6 +138,40 @@ class TrainingSession(models.Model):
         return f'{self.name}'
 
 
+class Schedule(models.Model):
+    """
+    Class representing tables schedule
+    """
+
+    date = models.DateField('date', help_text="Enter date", default=date.today)
+    trainer = models.ForeignKey(Trainer, on_delete=SET_NULL, null=True, blank=True)
+    training_session = models.ForeignKey(TrainingSession, on_delete=SET_NULL, null=True, blank=True)
+    start_time = models.TimeField('Start time',
+                                  help_text='Enter start time',
+                                  default=get_current_time)
+    end_time = models.TimeField('End time',
+                                help_text='Enter End time',
+                                default=get_current_time)
+
+    LOCATION_NAME = (
+        ('1', 'Main Studio'),
+        ('2', 'Yoga Room'),
+        ('3', 'Cardio Zone'),
+        ('4', 'Outdoor Terrace'),
+        ('5', 'Functional Training Area'),
+    )
+    location = models.CharField('Location',
+                                max_length=1,
+                                choices=LOCATION_NAME,
+                                default='1',
+                                blank=True,
+                                help_text="Gym class locations"
+                                )
+
+    def __str__(self):
+        return f'{self.date}, {self.start_time} {self.end_time} {self.trainer} {self.training_session}'
+
+
 class TrainerSchedule(models.Model):
     """
     Class representing the trainer's schedule.
@@ -198,12 +180,16 @@ class TrainerSchedule(models.Model):
     trainer = models.ForeignKey(Trainer, on_delete=SET_NULL, null=True, blank=True)
     training_session = models.ForeignKey(TrainingSession, on_delete=SET_NULL, null=True, blank=True)
 
+    def __str__(self):
+        return f'{self.schedule} {self.training_session}'
+
 
 class Reservation(models.Model):
     """
     Reservations table class representing one reservation
     """
     profile = models.ForeignKey(Profile, on_delete=SET_NULL, null=True, blank=True)
+    schedule = models.ForeignKey(Schedule, on_delete=SET_NULL, null=True, blank=True)
     RESERVATION_STATUS = (
         ('p', 'Processing'),
         ('r', 'Reserved'),
@@ -216,11 +202,6 @@ class Reservation(models.Model):
                                           blank=True,
                                           help_text="Membership status"
                                           )
-    training_session = models.ForeignKey(TrainingSession,
-                                         on_delete=SET_NULL,
-                                         null=True,
-                                         blank=True,
-                                         related_name='reservations')
 
     def __str__(self):
         return f'{self.rezervation_status}'

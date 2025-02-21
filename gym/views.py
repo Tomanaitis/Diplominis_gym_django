@@ -6,8 +6,9 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import TrainingSession, Membership, Trainer, Profile
+from .models import TrainingSession, Membership, Trainer, Reservation
 from .forms import ProfileUpdateForm, UserUpdateForm
 from .utils import check_password
 
@@ -147,3 +148,11 @@ def get_user_profile(request):
     }
 
     return render(request, 'profile.html', context=context)
+
+# class ReservationsByUserListView(LoginRequiredMixin, generic.ListView):
+#     model = Reservation
+#     context_object_name = 'reservation_list'
+#     template_name = 'user_reservations.html'
+#
+#     def get_queryset(self):
+#         return Reservation.objects.filter()
