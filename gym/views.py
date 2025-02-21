@@ -5,8 +5,10 @@ from django.core.paginator import Paginator
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
-from .models import TrainingSession, Membership, Trainer, User
+
+from .models import TrainingSession, Membership, Trainer, Profile
 from .forms import ProfileUpdateForm, UserUpdateForm
 from .utils import check_password
 
@@ -31,7 +33,7 @@ def index(request):
 
 def get_trainers(request):
     trainers = Trainer.objects.all()
-    paginator = Paginator(trainers, 1)
+    paginator = Paginator(trainers, 5)
     page_number = request.GET.get('page')
     paged_trainers = paginator.get_page(page_number)
     context = {'trainers': paged_trainers}
@@ -60,7 +62,7 @@ class TrainerListView(generic.ListView):
     model = Trainer
     context_object_name = 'trainer_list'
     template_name = 'trainers.html'
-    paginate_by = 1
+    paginate_by = 5
 
 
 class TrainingSessionListView(generic.ListView):
@@ -118,8 +120,13 @@ def register_user(request):
                                  password=password,
                                  first_name=first_name,
                                  last_name=last_name)
+
+
         messages.info(request, f'Vartotojas {username} užregistruotas!')
         return redirect('login')
+
+
+
 
 
 @login_required()

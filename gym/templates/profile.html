@@ -6,7 +6,9 @@
         src="{{ user.profile.picture.url }}" />
 <h2>{{ user.username }}</h2>
 <p> {{ user.email }} </p>
+<p> {{ profile.phone_number }} </p>
 </div>
+<hr>
 <div>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -17,4 +19,5 @@
         </div>
     </form>
 </div>
+<hr>
 {% endblock %}

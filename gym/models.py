@@ -15,6 +15,11 @@ def get_current_time():
 class Profile(models.Model):
     picture = models.ImageField(upload_to='profile_pics', default='default-user.png')
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    phone_number = models.CharField('Phone Number',
+                                    max_length=20,
+                                    help_text='Enter your phone number',
+                                    blank=True,
+                                    null=True)
 
     def __str__(self):
         return f'{self.user.username} profile'
@@ -25,20 +30,6 @@ class Profile(models.Model):
         thumb_size = (150, 150)
         img.thumbnail(thumb_size)
         img.save(self.picture.path)
-
-
-class Client(models.Model):
-    """
-    class for clients table reprezenting one client
-    """
-    # first_name = models.CharField('Name', max_length=50, help_text='Enter your name')
-    # last_name = models.CharField('Surname', max_length=50, help_text='Enter your surname')
-    # email = models.EmailField('Email', max_length=50, help_text="Enter email adress")
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='client')
-    phone_number = models.CharField('Phone_number', max_length=20, help_text='Enter your phone number')
-
-    def __str__(self):
-        return f'{self.profile.user.firs_name} {self.profile.user.last_name}'
 
 
 class Membership(models.Model):
@@ -52,14 +43,14 @@ class Membership(models.Model):
 
     TYPE_STATUS = (
         ('W', 'Weekly'),
-        ('q', 'Quarterly'),
+        ('M', 'Monthly'),
         ('Y', 'Yearly'),
-        ('t', 'Trial'),
+        ('T', 'Trial'),
     )
     membership_type = models.CharField('type',
                                        max_length=1,
                                        choices=TYPE_STATUS,
-                                       default='t',
+                                       default='T',
                                        blank=True,
                                        help_text="Membership type"
                                        )
@@ -76,7 +67,8 @@ class Membership(models.Model):
                                          blank=True,
                                          help_text="Membership status"
                                          )
-    client = models.ForeignKey(Client, on_delete=SET_NULL, null=True, blank=True)
+    profile = models.ForeignKey(Profile, on_delete=SET_NULL, null=True, blank=True)
+    description = HTMLField()
 
     def __str__(self):
         return f'{self.name} {self.start_date} {self.end_date} {self.membership_type}'
@@ -139,15 +131,12 @@ class Trainer(models.Model):
     last_name = models.CharField('Surname', max_length=50, help_text='Enter your surname')
     email = models.CharField('Email', max_length=50, help_text="Enter email adress")
     specialization = models.CharField('Specialization', max_length=100, default='Specialization....')
-    # professional_history = models.TextField('professional_history',
-    #                                         max_length=2000,
-    #                                         default='Professional accomplishments...'
-    #                                         )
     professional_history = HTMLField()
     trainer_cover = models.ImageField('trainer_cover',
                                       upload_to='covers/trainer_covers',
                                       null=True,
                                       blank=True)
+    cover = models.ImageField(upload_to='covers/trainer_covers', blank=True, null=True)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name} {self.email} {self.specialization}'
@@ -199,7 +188,7 @@ class Reservation(models.Model):
                                           blank=True,
                                           help_text="Membership status"
                                           )
-    client = models.ForeignKey(Client, on_delete=SET_NULL, null=True, blank=True)
+    profile = models.ForeignKey(Profile, on_delete=SET_NULL, null=True, blank=True)
     training_session = models.ForeignKey(TrainingSession,
                                          on_delete=SET_NULL,
                                          null=True,

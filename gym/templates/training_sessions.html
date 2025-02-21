@@ -2,10 +2,13 @@
 
 {% block content %}
 <h1>Vilnius gym available training sessions</h1>
+
+
 <ul>
     {% for trainingsession in trainingsession_list %}
     <li>{{ trainingsession.name }} {{ trainingsession.description|safe }}</li>
     {% endfor %}
+
 
 
 </ul>
