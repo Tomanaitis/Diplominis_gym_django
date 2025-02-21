@@ -20,8 +20,8 @@ class TrainerScheduleAdmin(admin.ModelAdmin):
 
 
 class TrainingSessionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'max_capacity', 'schedule', 'trainer')
-    list_editable = ('max_capacity', 'schedule', 'trainer')
+    list_display = ('name', 'duration', 'max_capacity')
+    list_editable = ('duration', 'max_capacity',)
     search_fields = ('name', 'description')
 
 
@@ -33,19 +33,19 @@ class TrainerAdmin(admin.ModelAdmin):
 
 
 class ScheduleAdmin(admin.ModelAdmin):
-    list_display = ('week_day', 'start_date', 'start_time', 'end_date', 'end_time')
-    list_editable = ('start_date', 'end_date', 'start_time', 'end_time')
+    list_display = ('week_day', 'date', 'start_time', 'end_time', 'location')
+    list_editable = ('date', 'start_time', 'end_time', 'location')
     search_fields = ('week_day', 'start_date', 'end_date')
 
 
 class MembershipAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'start_date', 'end_date', 'membership_type', 'membership_status', 'profile')
+    list_display = ('id', 'name', 'start_date', 'end_date', 'membership_type', 'membership_status')
     list_editable = ('name', 'start_date', 'end_date', 'membership_type', 'membership_status')
 
 
 class ReservationsAdmin(admin.ModelAdmin):
-    list_display = ('profile', 'rezervation_status')
-    list_editable = ('rezervation_status',)
+    list_display = ('profile', 'rezervation_status', 'training_session')
+    list_editable = ('rezervation_status', 'training_session')
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -54,8 +54,8 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('price', 'payment_date')
-    list_editable = ('payment_date',)
+    list_display = ('profile', 'payment_date', 'membership', 'price', 'payment_status')
+    list_editable = ('payment_date', 'membership', 'price', 'payment_status')
 
 
 admin.site.register(Membership, MembershipAdmin)

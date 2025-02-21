@@ -3,25 +3,9 @@
 {% block content %}
 
 <h1>TRAINERS</h1>
-<p>All proffesional trainers that are glad to help you</p>
-{% if trainers.has_other_pages %}
-    <ul class="pagination pagination-sm">
-        {% for nr in trainers.paginator.page_range %}
-            {% if trainers.number == nr %}
-                <li class="page-item active">
-                    <a class="page-link">{{ nr }}</a>
-                </li>
-            {% else %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ nr }}">{{ nr }}</a>
-            </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-{% endif %}
+<p>All of our professional trainers are dedicated to helping you achieve your goals with personalized guidance and support.</p>
 <ul>
     {% for trainer_obj in trainers %}
-
     <li>
         <a href="{% url 'trainer-one' trainer_obj.id %}" class="trainer-card">
             <div class="trainer-image-wrapper">
@@ -39,6 +23,20 @@
     </li>
     {% endfor %}
 </ul>
-<p></p>
+{% if trainers.has_other_pages %}
+    <ul class="pagination pagination-sm">
+        {% for nr in trainers.paginator.page_range %}
+            {% if trainers.number == nr %}
+                <li class="page-item active">
+                    <a class="page-link">{{ nr }}</a>
+                </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ nr }}">{{ nr }}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endif %}
 
 {% endblock %}

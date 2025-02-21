@@ -7,7 +7,6 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-
 from .models import TrainingSession, Membership, Trainer, Profile
 from .forms import ProfileUpdateForm, UserUpdateForm
 from .utils import check_password
@@ -121,12 +120,8 @@ def register_user(request):
                                  first_name=first_name,
                                  last_name=last_name)
 
-
         messages.info(request, f'Vartotojas {username} užregistruotas!')
         return redirect('login')
-
-
-
 
 
 @login_required()
