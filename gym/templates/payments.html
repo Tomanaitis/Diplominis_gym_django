@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1 class="mb-4">Payments</h1>
+  {% if payments %}
+    <div class="row">
+      {% for payment in payments %}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100 shadow">
+            <div class="card-body">
+              <h5 class="card-title">{{ payment.user }}</h5>
+              <p class="card-text">
+                <strong>Payment Date:</strong> {{ payment.payment_date }}<br>
+                <strong>Membership:</strong> {{ payment.membership }}<br>
+                <strong>Price:</strong> {{ payment.price }} EUR<br>
+                <strong>Status:</strong> {{ payment.get_payment_status_display }}<br>
+                <strong>Overdue:</strong>
+                {% if payment.is_overdue %}
+                  <span class="text-danger">Overdue</span>
+                {% else %}
+                  <span class="text-success">Not overdue</span>
+                {% endif %}
+              </p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No payments available.</p>
+  {% endif %}
+{% endblock %}

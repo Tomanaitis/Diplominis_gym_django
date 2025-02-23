@@ -6,9 +6,9 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-# from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-from .models import TrainingSession, Membership, Trainer, DisplayMembership, Reservation, Payment
+from .models import TrainingSession, Membership, Trainer, DisplayMembership, Reservation, Payment, TrainingSessionReview
 from .forms import ProfileUpdateForm, UserUpdateForm, TrainingSessionReviewForm
 from .utils import check_password
 
@@ -205,3 +205,21 @@ def get_user_profile(request):
     }
 
     return render(request, 'profile.html', context=context)
+
+
+class TrainingSessionReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    model = TrainingSessionReview
+    template_name = 'staff_training_session_review_delete.html'
+    context_object_name = 'trainingsessionreview'
+
+
+    def get_success_url(self):
+        trainingsessionreview_object = self.get_object()
+        return reverse('trainingsession-one', kwargs={'pk': trainingsessionreview_object.training_session.id})
+
+    def test_func(self):
+        check = False
+        for group in self.request.user.groups.all():
+            if group.name == 'staff':
+                check = True
+        return check

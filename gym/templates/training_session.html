@@ -50,7 +50,7 @@
         <div class="form-group">
           {{ form.content }}
         </div>
-        <button type="submit" class="btn btn-outline-success btn-sm">Išsaugoti komentarą</button>
+        <button type="submit" class="btn btn-outline-success btn-sm">Save comment</button>
       </form>
     </div>
   {% endif %}
@@ -64,6 +64,13 @@
           <strong>{{ review.reviewer }}</strong> <em>{{ review.date_created }}</em>
         </small>
         <p>{{ review.content }}</p>
+
+        {% for group in user.groups.all %}
+        {% if group.name == 'staff' %}
+        <a class="btn btn-danger btn-sm" href="{% url 'reviews-delete' review.id %}">Delete</a>
+        {% endif %}
+    {% endfor %}
+
       </div>
     {% empty %}
       <p class="text-muted">Training session has no reviews...</p>

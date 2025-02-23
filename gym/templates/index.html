@@ -21,10 +21,12 @@
 <h6>Your visits: {{ num_visits_t }} </h6>
 <hr>
 
-<p>{{ user.groups.all }}</p>
+
 {% for group in user.groups.all %}
     {% if group.name == 'staff' %}
         <p>{{user}} belongs to staff</p>
+    {% elif group.name == 'member' %}
+        <p>{{user}} belongs to gym members</p>
     {% endif %}
 {% endfor %}
 

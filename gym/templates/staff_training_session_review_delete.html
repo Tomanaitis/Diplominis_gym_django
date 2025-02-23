@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+    <p>Autorius: {{ trainingsessionreview.reviewer }}</p>
+    <p>Turinys: {{ trainingsessionreview.content }}</p>
+    <p>Data: {{ trainingsessionreview.date_created }}</p>
+    <div class="form-group">
+        <button class="btn btn-danger" type="submit">Yes</button>
+        <a class="btn btn-secondary" href="{% url 'trainingsession-one' trainingsessionreview.training_session.id %}">CANCEL</a>
+    </div>
+</form>
+
+{% endblock %}

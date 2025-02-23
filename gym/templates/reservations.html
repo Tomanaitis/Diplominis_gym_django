@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="mb-4">Reservations</h1>
+{% if user.reservations.all %}
+  <div class="row">
+    {% for reservation in user.reservations.all %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow">
+          <div class="card-body">
+            <h5 class="card-title">{{ reservation.schedule.training_session.name }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Trainer: {{ reservation.schedule.trainer }}</h6>
+            <p class="card-text">
+              <strong>Date:</strong> {{ reservation.schedule.date }}<br>
+              <strong>Time:</strong> {{ reservation.schedule.start_time }} - {{ reservation.schedule.end_time }}<br>
+              <strong>Location:</strong>
+              <span class="font-weight-bold
+                {% if reservation.schedule.location == '1' %}text-default
+                {% elif reservation.schedule.location == '2' %}text-default
+                {% elif reservation.schedule.location == '3' %}text-default
+                {% elif reservation.schedule.location == '4' %}text-default
+                {% elif reservation.schedule.location == '5' %}text-default
+                {% else %}text-muted{% endif %}">
+                {{ reservation.schedule.get_location_display }}
+              </span>
+              <br>
+              <strong>Status:</strong>
+              <span class="font-weight-bold
+                {% if reservation.rezervation_status == 'e' %}text-danger
+                {% elif reservation.rezervation_status == 'r' %}text-success
+                {% elif reservation.rezervation_status == 'p' %}text-warning
+                {% else %}text-muted{% endif %}">
+                {{ reservation.get_rezervation_status_display }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No reservations found.</p>
+{% endif %}
+{% endblock %}
