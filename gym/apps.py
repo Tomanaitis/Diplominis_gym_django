@@ -6,5 +6,4 @@ class GymConfig(AppConfig):
     name = 'gym'
 
     def ready(self):
-        import gym.signals
-        # from .signals import create_profile
+        from .signals import create_profile

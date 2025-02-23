@@ -14,6 +14,9 @@ from .utils import check_password
 
 
 def index(request):
+    """
+    Renders the homepage with counts of memberships, trainers, training sessions, and tracks user visits.
+    """
     num_memberships = DisplayMembership.objects.count()
     num_trainers = Trainer.objects.count()
     num_training_sessions = TrainingSession.objects.count()
@@ -32,6 +35,9 @@ def index(request):
 
 
 def get_trainers(request):
+    """
+    Renders the trainers page with a paginated list of all trainers.
+    """
     trainers = Trainer.objects.all()
     paginator = Paginator(trainers, 4)
     page_number = request.GET.get('page')
@@ -41,42 +47,55 @@ def get_trainers(request):
 
 
 def get_one_trainer(request, trainer_id):
+    """
+    Renders the details page for a specific trainer using the trainer's ID.
+    """
     one_trainer = get_object_or_404(Trainer, pk=trainer_id)
     context = {'one_trainer': one_trainer}
     return render(request, 'trainer.html', context=context)
 
 
 class MembershipListView(generic.ListView):
+    """
+    Displays a list of USER memberships using the 'memberships.html' template.
+    """
     model = Membership
     context_object_name = 'membership_list'
     template_name = 'memberships.html'
 
 
-class MembershipDetailView(generic.DetailView):
-    model = Membership
-    context_object_name = 'membership'
-    template_name = 'membership.html'
-
-
 class DisplayMembershipListView(generic.ListView):
+    """
+    Displays a list view of membership using the 'membership.html' template.
+    """
     model = DisplayMembership
     context_object_name = 'displaymembership_list'
     template_name = 'display_memberships.html'
 
 
 class DisplayMembershipDetailView(generic.DetailView):
+    """
+    Displays the details of a specific membership using the 'display_membership.html' template.
+    """
     model = DisplayMembership
     context_object_name = 'displaymembership'
     template_name = 'display_membership.html'
 
 
 class TrainingSessionListView(generic.ListView):
+    """
+    Displays a list view of training sessions using the 'training_sessions.html' template.
+    """
     model = TrainingSession
     context_object_name = 'trainingsession_list'
     template_name = 'training_sessions.html'
 
 
 class TrainingSessionDetailView(generic.edit.FormMixin, generic.DetailView):
+    """
+    Displays the details of a specific trainingsession using the 'training_session.html' template.
+    and USER rewiew functionallity throu form
+    """
     model = TrainingSession
     context_object_name = 'trainingsession'
     template_name = 'training_session.html'
@@ -94,7 +113,8 @@ class TrainingSessionDetailView(generic.edit.FormMixin, generic.DetailView):
 
     def form_valid(self, form):
         """
-        Intended for saving data received from the form in views. During validation, we record the training session and the user.
+        Intended for saving data received from the form in views.
+        During validation, we record the training session and the user.
         """
         self.training_session_object = self.get_object()  #
         form.instance.training_session = self.training_session_object
@@ -104,24 +124,35 @@ class TrainingSessionDetailView(generic.edit.FormMixin, generic.DetailView):
 
     def get_success_url(self):
         """
-        were browser gonna go after successesful form post
+        Reverse were browser gonna go after successesful form post
         """
         return reverse('trainingsession-one', kwargs={'pk': self.training_session_object.id})
 
 
 class ReservarsionsListView(generic.ListView):
+    """
+    Displays a list of USER reservations using the 'reservations.html' template.
+    """
     model = Reservation
     context_object_name = 'reservations'
     template_name = 'reservations.html'
 
 
 class PaymentsListView(generic.ListView):
+    """
+    Displays a list of USER payments using the 'payments.html' template.
+    """
     model = Payment
     context_object_name = 'payments'
     template_name = 'payments.html'
 
 
 def search(request):
+    """
+    Search function allows clients to get information
+    by trainers last name and specialization and
+    training session name
+    """
     query_text = request.GET.get('search_text')
 
     trainer_results = Trainer.objects.filter(
@@ -143,6 +174,9 @@ def search(request):
 
 @csrf_protect
 def register_user(request):
+    """
+    Function for user registration
+    """
     if request.method == 'GET':
         return render(request, 'registration/registration.html')
     elif request.method == 'POST':
@@ -187,6 +221,9 @@ def register_user(request):
 @login_required()
 @csrf_protect
 def get_user_profile(request):
+    """
+    Function for USER profile
+    """
     if request.method == 'POST':
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         u_form = UserUpdateForm(request.POST, instance=request.user)
@@ -210,6 +247,9 @@ def get_user_profile(request):
 
 
 class TrainingSessionReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    """
+    Allows registered user to leave reviews on training sessions
+    """
     model = TrainingSessionReview
     template_name = 'staff_training_session_review_delete.html'
     context_object_name = 'trainingsessionreview'
