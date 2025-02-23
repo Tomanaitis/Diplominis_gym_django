@@ -212,7 +212,6 @@ class TrainingSessionReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, g
     template_name = 'staff_training_session_review_delete.html'
     context_object_name = 'trainingsessionreview'
 
-
     def get_success_url(self):
         trainingsessionreview_object = self.get_object()
         return reverse('trainingsession-one', kwargs={'pk': trainingsessionreview_object.training_session.id})
