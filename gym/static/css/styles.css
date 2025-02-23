@@ -1,15 +1,15 @@
 body {
     background-color: #95B9C7;
-}
+
 }
 .card {
-    min-height: 450px;
+    min-height: 300px;
     width: 100%;
 }
 .card-body{
-    height: 25%;
+    height: 75%;
 }
 .card img{
-    height: 75%;
+    height: 100%;
     object-fit: contain;
 }

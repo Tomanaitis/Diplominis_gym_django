@@ -40,24 +40,24 @@ class Membership(models.Model):
     class for membership table reprezenting on membership
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    name = models.CharField('Name', max_length=50, help_text="Trial, Basic, Flexible, Premium", default="Trial")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='membership')
     start_date = models.DateField('Start_date', help_text="Enter start date", default=date.today)
     end_date = models.DateField('End_date', help_text="Enter end date", default=date.today)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='membership')
-    profile = models.ForeignKey(Profile, on_delete=SET_NULL, null=True, blank=True, default=None)
-    description = HTMLField()
-    TYPE_STATUS = (
-        ('B', 'Basic'),
-        ('F', 'Flexible'),
-        ('P', 'Premium'),
-        ('T', 'Trial'),
-    )
-    membership_type = models.CharField('type',
-                                       max_length=1,
-                                       choices=TYPE_STATUS,
-                                       default='T',
-                                       blank=True,
-                                       help_text="Membership type"
-                                       )
+
+    # TYPE_STATUS = (
+    #     ('B', 'Basic'),
+    #     ('F', 'Flexible'),
+    #     ('P', 'Premium'),
+    #     ('T', 'Trial'),
+    # )
+    # membership_type = models.CharField('type',
+    #                                    max_length=1,
+    #                                    choices=TYPE_STATUS,
+    #                                    default='T',
+    #                                    blank=True,
+    #                                    help_text="Membership type"
+    #                                    )
 
     STATUS_STATUS = (
         ('p', 'Processing'),
@@ -71,9 +71,10 @@ class Membership(models.Model):
                                          blank=True,
                                          help_text="Membership status"
                                          )
+    description = HTMLField(blank=True, default=None)
 
     def __str__(self):
-        return f'{self.membership_type} {self.start_date} - {self.end_date}'
+        return f'{self.name} {self.start_date} - {self.end_date}'
 
 
 class DisplayMembership(models.Model):
@@ -84,6 +85,7 @@ class DisplayMembership(models.Model):
     name = models.CharField('Name', max_length=50)
     price = models.FloatField('Price EUR', help_text='Enter membership price')
     description = HTMLField()
+    cover = models.ImageField(upload_to='covers/membership_covers', blank=True, null=True)
 
     def __str__(self):
         return f'{self.name} {self.price}'
@@ -93,11 +95,10 @@ class Payment(models.Model):
     """
     Payments table class representing one payment
     """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments')
+    membership = models.ForeignKey(Membership, on_delete=SET_NULL, null=True, blank=True)
     price = models.FloatField('Price EUR', help_text='Enter payment price')
     payment_date = models.DateField('Payment_date', help_text="Enter date", default=date.today)
-    membership = models.ForeignKey(Membership, on_delete=SET_NULL, null=True, blank=True)
-    profile = models.ForeignKey(Profile, on_delete=SET_NULL, null=True, blank=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='payment')
 
     PAYMENT_STATUS = (
         ('p', 'Processing'),
@@ -112,8 +113,15 @@ class Payment(models.Model):
                                       help_text="Membership status"
                                       )
 
+    @property
+    def is_overdue(self):
+        if self.payment_date and date.today() > self.payment_date:
+            return True  # pradelsta
+        else:
+            return False
+
     def __str__(self):
-        return f'{self.price} EUR on {self.payment_date} {self.membership} {self.profile}'
+        return f'{self.price} EUR on {self.payment_date} {self.membership}'
 
 
 class Trainer(models.Model):
@@ -139,9 +147,8 @@ class TrainingSession(models.Model):
     Class respresents tables training session element
     """
     name = models.CharField('Name', max_length=50, help_text='Enter training sessions name')
-    description = HTMLField()
-    max_capacity = models.PositiveIntegerField('Capacity', help_text="Enter max capacity")
     duration = models.DurationField(default="01:00:00", help_text="Default time is 1 hour")
+    description = HTMLField()
     ts_cover = models.ImageField('training session cover',
                                  upload_to='covers/ts_covers',
                                  null=True,
@@ -155,10 +162,12 @@ class Schedule(models.Model):
     """
     Class representing tables schedule
     """
-
+    max_capacity = models.PositiveIntegerField('Capacity', null=True, blank=True,
+                                               help_text="Enter max capacity")
     date = models.DateField('date', help_text="Enter date", default=date.today)
     trainer = models.ForeignKey(Trainer, on_delete=SET_NULL, null=True, blank=True)
-    training_session = models.ForeignKey(TrainingSession, on_delete=SET_NULL, null=True, blank=True)
+    training_session = models.ForeignKey(TrainingSession, on_delete=SET_NULL,
+                                         null=True, blank=True, related_name='schedule')
     start_time = models.TimeField('Start time',
                                   help_text='Enter start time',
                                   default=get_current_time)
@@ -182,7 +191,7 @@ class Schedule(models.Model):
                                 )
 
     def __str__(self):
-        return f'{self.date}, {self.start_time} {self.end_time} {self.trainer} {self.training_session}'
+        return f'{self.date}, {self.start_time} {self.end_time} {self.training_session}'
 
 
 class TrainerSchedule(models.Model):
@@ -201,8 +210,9 @@ class Reservation(models.Model):
     """
     Reservations table class representing one reservation
     """
-    profile = models.ForeignKey(Profile, on_delete=SET_NULL, null=True, blank=True)
+
     schedule = models.ForeignKey(Schedule, on_delete=SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reservations')
     RESERVATION_STATUS = (
         ('p', 'Processing'),
         ('r', 'Reserved'),

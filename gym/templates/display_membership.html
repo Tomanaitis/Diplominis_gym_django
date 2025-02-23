@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Membership</h1>
-<a>{{ displaymembership.description|safe }} </a>
 
+<hr>
+<h2>{{ displaymembership.name }}</h2>
+<a>{{ displaymembership.description|safe }} </a>
+<hr>
+
+<a href="{% url 'displaymemberships-all' %}" class="btn btn-primary">Back</a>
 
 {% endblock %}

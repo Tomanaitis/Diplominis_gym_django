@@ -6,7 +6,7 @@ from .models import Profile, User, TrainingSessionReview
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('picture', 'phone_number')
+        fields = ('phone_number', 'picture')
 
 
 class UserUpdateForm(forms.ModelForm):

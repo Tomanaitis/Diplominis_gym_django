@@ -7,5 +7,8 @@
 <a>{{ one_trainer.specialization }}</a>
 <a>{{ one_trainer.professional_history|safe }}</a>
 
+<hr>
+<a href="{% url 'trainers-all' %}" class="btn btn-primary">Back</a>
+<hr>
 
 {% endblock %}

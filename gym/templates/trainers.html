@@ -1,44 +1,51 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<div class="container my-5">
+  <h1 class="mb-4">TRAINERS</h1>
+  <p class="mb-4">All of our professional trainers are dedicated to helping you achieve your goals with personalized guidance and support.</p>
 
-<h1>TRAINERS</h1>
-<p>All of our professional trainers are dedicated to helping you achieve your goals with personalized guidance and support.</p>
-<ul>
+  <div class="row">
     {% for trainer_obj in trainers %}
-    <li>
-        <a href="{% url 'trainer-one' trainer_obj.id %}" class="trainer-card">
-        <h3>{{ trainer_obj.first_name }} {{ trainer_obj.last_name }}</h3></a>
-    <div class="trainer-info">
-        <p>Specialization: {{ trainer_obj.specialization }}</p>
-
-        <div class="trainer-image-wrapper">
-                {% if trainer_obj.cover %}
-                    <img src="{{ trainer_obj.cover.url }}" class="trainer-image img-fluid"/>
-                {% else %}
-                    <img src="{% static 'img/no-image.png' %}" class="trainer-image img-fluid"/>
-                {% endif %}
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+      <div class="card h-100 shadow-sm rounded">
+        {% if trainer_obj.cover %}
+          <img src="{{ trainer_obj.cover.url }}" class="card-img-top img-fluid" alt="{{ trainer_obj.first_name }} {{ trainer_obj.last_name }}">
+        {% else %}
+          <img src="{% static 'img/no-image.png' %}" class="card-img-top img-fluid" alt="No image available">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">
+            <a>
+              {{ trainer_obj.first_name }} {{ trainer_obj.last_name }}
+            </a>
+          </h5>
+          <p class="card-text">Specialization: {{ trainer_obj.specialization }}</p>
         </div>
-
-        <hr>
+            <div class="card-footer bg-transparent border-top-0">
+            <a href="{% url 'trainer-one' trainer_obj.id %}" class="btn btn-primary btn-block">View trainer</a>
+          </div>
+      </div>
     </div>
-    </li>
     {% endfor %}
-</ul>
-{% if trainers.has_other_pages %}
-    <ul class="pagination pagination-sm">
-        {% for nr in trainers.paginator.page_range %}
-            {% if trainers.number == nr %}
-                <li class="page-item active">
-                    <a class="page-link">{{ nr }}</a>
-                </li>
-            {% else %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ nr }}">{{ nr }}</a>
-            </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-{% endif %}
+  </div>
 
+  {% if trainers.has_other_pages %}
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center pagination-sm">
+      {% for nr in trainers.paginator.page_range %}
+        {% if trainers.number == nr %}
+          <li class="page-item active">
+            <a class="page-link">{{ nr }}</a>
+          </li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ nr }}">{{ nr }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </nav>
+  {% endif %}
+</div>
 {% endblock %}

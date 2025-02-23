@@ -3,16 +3,30 @@
 {% block content %}
 
 <h1>Vilnius Gym</h1>
+<hr>
 <h2>Statistics:</h2>
-<p>Number of trainers: {{ num_trainers_t }}</p>
-<p>Number of available training sessions: {{ num_training_sessions_t }}</p>
-<p>Membership options: {{ num_memberships_t }}</p>
-
+<hr>
+<h4>Number of trainers: {{ num_trainers_t }}</h4>
+<hr>
+<h4>Number of available training sessions: {{ num_training_sessions_t }}</h4>
+<hr>
+<h4>Membership options: {{ num_memberships_t }}</h4>
+<hr>
 {% if user.username %}
-    <p>Welcome, {{ user.username }}</p>
+    <h6>Welcome, {{ user.username }}</h6>
 {% else %}
-    <p>Welcome, guest</p>
+    <h6>Welcome, guest</h6>
 {% endif %}
-<p>Your visits: {{ num_visits_t }} </p>
+<hr>
+<h6>Your visits: {{ num_visits_t }} </h6>
+<hr>
+
+<p>{{ user.groups.all }}</p>
+{% for group in user.groups.all %}
+    {% if group.name == 'staff' %}
+        <p>{{user}} belongs to staff</p>
+    {% endif %}
+{% endfor %}
+
 
 {% endblock %}

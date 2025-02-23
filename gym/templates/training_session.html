@@ -1,39 +1,76 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h1>training session detail view:</h1>
-<h2>{{ trainingsession.name }}</h2>
-<hr>
+<div class="container mt-5">
+  <h1 class="mb-3">Training Session Detail</h1>
+  <h2 class="mb-3">{{ trainingsession.name }}</h2>
+  <hr>
   <div class="">
     {% if trainingsession.ts_cover %}
-        <img src="{{ trainingsession.ts_cover.url }}" class="trainingsession-image img-fluid"/>
+      <img src="{{ trainingsession.ts_cover.url }}" class="img-fluid" alt="{{ trainingsession.name }}">
     {% else %}
-        <img src="{% static 'img/no-image.png' %}" class="trainingsession-image img-fluid"/>
+      <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="No image available">
     {% endif %}
   </div>
-<hr>
-<h6>{{ trainingsession.description|safe }}</h6>
-{% if user.is_authenticated %}
-<div>
-    <h5>Leave a review about training session:</h5>
+  <div class="mb-4">
+    <hr>
+    <h5>{{ trainingsession.description|safe }}</h5>
+  </div>
+
+  {% if user.is_authenticated %}
+    <hr>
+    <div class="mb-4">
+      <h4>Upcoming Classes</h4>
+      {% for schedule in trainingsession.schedule.all %}
+        <p>
+          {{ schedule.date }} from {{ schedule.start_time }} to {{ schedule.end_time }}<br>
+          Trainer: {{ schedule.trainer.first_name }} {{ schedule.trainer.last_name }}<br>
+          Specialization: {{ schedule.trainer.specialization }}<br>
+
+          Location:
+          <span class="font-weight-bold
+            {% if schedule.location == '1' %}text-primary
+            {% elif schedule.location == '2' %}text-success
+            {% elif schedule.location == '3' %}text-info
+            {% elif schedule.location == '4' %}text-warning
+            {% elif schedule.location == '5' %}text-danger
+            {% else %}text-muted{% endif %}">
+            {{ schedule.get_location_display }}
+          </span>
+        </p>
+      {% empty %}
+        <p class="text-muted">No upcoming classes available.</p>
+      {% endfor %}
+    </div>
+    <hr>
+    <div class="mb-4">
+      <h5>Leave a Review</h5>
       <form method="post">
-      {% csrf_token %}
-      {{ form.content }}
-        <div>
-          <input type="submit" class="btn btn-outline-success btn-sm" value="Išsaugoti komentarą"/>
+        {% csrf_token %}
+        <div class="form-group">
+          {{ form.content }}
         </div>
+        <button type="submit" class="btn btn-outline-success btn-sm">Išsaugoti komentarą</button>
       </form>
-</div>
-{% endif %}
-<hr/>
-{% for trainingsession in trainingsession.trainingsessionreview_set.all %}
-  <small><b>{{ trainingsession.reviewer }}</b> <em>{{ trainingsession.date_created }}</em></small>
-    <p class="bg-light">{{ trainingsession.content }}</p>
-<hr/>
-{% endfor %}
-  {% if not trainingsession.trainingsessionreview_set.first %}
-    <p>Training session has no reviews...</p>
-<hr/>
+    </div>
   {% endif %}
 
+  <hr>
+  <div>
+    <h4>Reviews</h4>
+    {% for review in trainingsession.trainingsessionreview_set.all %}
+      <div class="mb-3 p-3 bg-light">
+        <small>
+          <strong>{{ review.reviewer }}</strong> <em>{{ review.date_created }}</em>
+        </small>
+        <p>{{ review.content }}</p>
+      </div>
+    {% empty %}
+      <p class="text-muted">Training session has no reviews...</p>
+    {% endfor %}
+  </div>
+</div>
+<hr>
+<a href="{% url 'trainingsessions-all' %}" class="btn btn-primary">Back</a>
+<hr>
 {% endblock %}

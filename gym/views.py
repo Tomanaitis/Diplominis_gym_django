@@ -8,13 +8,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 # from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import TrainingSession, Membership, Trainer, DisplayMembership
+from .models import TrainingSession, Membership, Trainer, DisplayMembership, Reservation, Payment
 from .forms import ProfileUpdateForm, UserUpdateForm, TrainingSessionReviewForm
 from .utils import check_password
 
 
 def index(request):
-    num_memberships = Membership.objects.count()
+    num_memberships = DisplayMembership.objects.count()
     num_trainers = Trainer.objects.count()
     num_training_sessions = TrainingSession.objects.count()
 
@@ -33,7 +33,7 @@ def index(request):
 
 def get_trainers(request):
     trainers = Trainer.objects.all()
-    paginator = Paginator(trainers, 5)
+    paginator = Paginator(trainers, 4)
     page_number = request.GET.get('page')
     paged_trainers = paginator.get_page(page_number)
     context = {'trainers': paged_trainers}
@@ -74,7 +74,7 @@ class TrainerListView(generic.ListView):
     model = Trainer
     context_object_name = 'trainer_list'
     template_name = 'trainers.html'
-    paginate_by = 5
+    paginate_by = 3
 
 
 class TrainingSessionListView(generic.ListView):
@@ -103,7 +103,7 @@ class TrainingSessionDetailView(generic.edit.FormMixin, generic.DetailView):
         """
         skirtas duomenu issaugojimui is views is formos gautu, validacijos metu mes irasom training sessiona ir useri
         """
-        self.training_session_object = self.get_object() #
+        self.training_session_object = self.get_object()  #
         form.instance.training_session = self.training_session_object
         form.instance.reviewer = self.request.user
         form.save()
@@ -114,6 +114,18 @@ class TrainingSessionDetailView(generic.edit.FormMixin, generic.DetailView):
         were browser gonna go after successesful form post
         """
         return reverse('trainingsession-one', kwargs={'pk': self.training_session_object.id})
+
+
+class ReservarsionsListView(generic.ListView):
+    model = Reservation
+    context_object_name = 'reservations'
+    template_name = 'reservations.html'
+
+
+class PaymentsListView(generic.ListView):
+    model = Payment
+    context_object_name = 'payments'
+    template_name = 'payments.html'
 
 
 def search(request):

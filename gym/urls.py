@@ -12,6 +12,10 @@ urlpatterns = [
     path('profile/', views.get_user_profile, name='user-profile'),
     path('trainingsessions/', views.TrainingSessionListView.as_view(), name='trainingsessions-all'),
     path('trainingsession/<int:pk>', views.TrainingSessionDetailView.as_view(), name='trainingsession-one'),
+    path('reservations/', views.ReservarsionsListView.as_view(), name='reservations-all'),
+    path('payment/', views.PaymentsListView.as_view(), name='payments-all'),
+    path('menberships/', views.MembershipListView.as_view(), name='memberships-all'),
+    path('memebership/<uuid:pk>', views.MembershipDetailView.as_view(), name='membership-one'),
+
 ]
 
-# path('memebership/<uuid:pk>', views.MembershipDetailView.as_view(), name='membership-one'),

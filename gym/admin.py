@@ -4,8 +4,8 @@ from .models import (Membership, Payment, Schedule, TrainerSchedule, Trainer, Tr
                      Profile, DisplayMembership, TrainingSessionReview)
 
 
-class TrainerScheduleInline(admin.TabularInline):
-    model = TrainerSchedule
+class ScheduleInline(admin.TabularInline):
+    model = Schedule
     extra = 1
 
 
@@ -20,8 +20,7 @@ class TrainerScheduleAdmin(admin.ModelAdmin):
 
 
 class TrainingSessionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'duration', 'max_capacity')
-    list_editable = ('duration', 'max_capacity',)
+    list_display = ('name', 'duration')
     search_fields = ('name', 'description')
 
 
@@ -29,22 +28,23 @@ class TrainerAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'email', 'specialization')
     list_editable = ('email', 'specialization')
     search_fields = ('specialization', 'last_name')
-    inlines = [TrainerScheduleInline]
+    inlines = [ScheduleInline]
 
 
 class ScheduleAdmin(admin.ModelAdmin):
-    list_display = ('date', 'start_time', 'end_time', 'trainer', 'training_session', 'location')
-    list_editable = ('start_time', 'end_time', 'trainer', 'training_session', 'location')
+    list_display = ('date', 'start_time', 'end_time', 'trainer', 'training_session', 'location', 'max_capacity')
+    list_editable = ('start_time', 'end_time', 'trainer', 'training_session', 'location', 'max_capacity')
     search_fields = ('date', 'trainer')
+    inlines = [ReservationsInline]
 
 
 class MembershipAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'membership_type', 'start_date', 'end_date', 'membership_status', 'profile')
-    list_editable = ('start_date', 'end_date', 'membership_type', 'membership_status', 'profile')
+    list_display = ('id', 'user', 'name', 'start_date', 'end_date', 'membership_status')
+    list_editable = ('start_date', 'end_date', 'name', 'membership_status')
 
 
 class ReservationsAdmin(admin.ModelAdmin):
-    list_display = ('profile', 'rezervation_status', 'schedule')
+    list_display = ('user', 'rezervation_status', 'schedule')
     list_editable = ('rezervation_status', 'schedule')
 
 
@@ -54,7 +54,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('profile', 'user', 'payment_date', 'membership', 'price', 'payment_status')
+    list_display = ('user', 'payment_date', 'membership', 'price', 'payment_status')
     list_editable = ('payment_date', 'membership', 'price', 'payment_status')
 
 
