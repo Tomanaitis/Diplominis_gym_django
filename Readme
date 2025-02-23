@@ -1,0 +1,10 @@
+# Gym Management Django App
+
+This is a Django-based web application for managing a gym, including member registration,
+class schedules, and payment tracking.
+
+## Features
+- Member Registration and Profile Management
+- Class Scheduling and Bookings
+- Payment Tracking and History
+- Admin Dashboard for managing gym operations
