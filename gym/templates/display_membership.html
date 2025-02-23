@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-
-<hr>
-<h2>{{ displaymembership.name }}</h2>
-<a>{{ displaymembership.description|safe }} </a>
-<hr>
-
-<a href="{% url 'displaymemberships-all' %}" class="btn btn-primary">Back</a>
+<div class="row">
+    <div class="mb-4">
+        <div class="container mt-6 shadow rounded" style="background-color: white; padding: 1rem; max-width: 800px;">
+            <hr>
+            <h2> {{ displaymembership.name }}</h2>
+            <a>{{ displaymembership.description|safe }} </a>
+            <hr>
+            <a href="{% url 'displaymemberships-all' %}" class="btn btn-primary">Back</a>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

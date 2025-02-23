@@ -4,32 +4,28 @@
 <h1>Available memberhsips:</h1>
 <div class="row">
     {% for display_membership in displaymembership_list %}
-    <div class="col-sm-6 col-md-3 d-flex align-items-stretch">
+    <div class="col-sm- col-md-4 d-flex align-items-stretch">
         <div class="card mb-4 shadow rounded">
             <div class="display_membership-image-wrapper">
                 {% if display_membership.cover %}
-                    <img class="card-img-top" src="{{ display_membership.cover.url }}" alt="{{ display_membership }}"/>
+                <img class="card-img-top" src="{{ display_membership.cover.url }}" alt="{{ display_membership }}"/>
                 {% else %}
-                    <img class="card-img-top" src="{% static 'img/no-image.png' %}" alt="No image available"/>
+                <img class="card-img-top" src="{% static 'img/no-image.png' %}" alt="No image available"/>
                 {% endif %}
             </div>
             <div class="card-body">
-                <h6 class="card-subtitle mb-2 text-muted">{{ display_membership.name }}</h6>
+                <h6 class="card-subtitle mb-3 text-muted">{{ display_membership.name }}</h6>
                 <p class="card-text">
                     <a>
                         {{ display_membership.price }} - EUR/Month
                     </a>
-                    <div class="card-footer bg-transparent border-top-0">
-            <a href="{% url 'displaymembership-one' display_membership.id %}" class="btn btn-primary btn-block">View membership</a>
-                    </div>
-                </p>
+                <div class="card-footer bg-transparent border-top-0">
+                    <a href="{% url 'displaymembership-one' display_membership.id %}" class="btn btn-primary btn-block">View
+                        membership</a>
+                </div>
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
-
-
-<p></p>
-
 {% endblock %}

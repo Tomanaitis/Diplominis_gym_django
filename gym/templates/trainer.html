@@ -2,13 +2,16 @@
 {% load static %}
 {% block content %}
 
+<div class="my-3 shadow rounded" style="background-color: white; padding: 1rem; max-width: 500px;">
+    <div>
+        <h4> {{ one_trainer.first_name }} {{ one_trainer.last_name }}</h4>
+        <hr>
+        <a>{{ one_trainer.specialization }}</a>
+        <a>{{ one_trainer.professional_history|safe }}</a>
 
-<h4> {{ one_trainer.first_name }} {{ one_trainer.last_name }}</h4>
-<a>{{ one_trainer.specialization }}</a>
-<a>{{ one_trainer.professional_history|safe }}</a>
-
-<hr>
-<a href="{% url 'trainers-all' %}" class="btn btn-primary">Back</a>
-<hr>
-
+        <hr>
+        <a href="{% url 'trainers-all' %}" class="btn btn-primary">Back</a>
+        <hr>
+    </div>
+</div>
 {% endblock %}

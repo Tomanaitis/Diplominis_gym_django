@@ -19,4 +19,3 @@ urlpatterns = [
     path('trainingsession/reviews/<int:pk>', views.TrainingSessionReviewDeleteView.as_view(), name='reviews-delete'),
 
 ]
-

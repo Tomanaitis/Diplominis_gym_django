@@ -2,31 +2,28 @@
 
 {% block content %}
 <div class="my-3 shadow rounded" style="background-color: white; padding: 1rem; max-width: 500px;">
-  <h1 class="mb-3">{{ user }} Membership:</h1>
-        <hr>
-            <h5>Membership Status:</h5>
-              <p class="font-weight-bold
+    <h1 class="mb-3">{{ user }} Membership:</h1>
+    <hr>
+    <h5>Membership Status:</h5>
+    <p class="font-weight-bold
                             {% if user.membership.membership_status == 'p' %}text-danger
                             {% elif user.membership.membership_status == 'a' %}text-success
                             {% elif user.membership.membership_status == 'e' %}text-warning
                             {% else %}text-muted{% endif %}">
-                {{ user.membership.get_membership_status_display }}
-              </p>
-<h5>Type: </h5>
+        {{ user.membership.get_membership_status_display }}
+    </p>
+    <h5>Type: </h5>
     <h6>{{ user.membership.name }}</h6>
-<h5>Starting date: </h5>
+    <h5>Starting date: </h5>
     <h6>{{ user.membership.start_date }}</h6>
-<h5>Renew date: </h5>
+    <h5>Renew date: </h5>
     <h6>{{ user.membership.end_date }}</h6>
     <h6>{{ user.membership.description|safe }}</h6>
 
-     <p class="lead">
-         <a href="{% url 'displaymemberships-all'%}" class="btn btn-primary btn-block">All available memberships</a>
+    <p class="lead">
+        <a href="{% url 'displaymemberships-all'%}" class="btn btn-primary btn-block">All available memberships</a>
 
-      </p>
-
-
-
+    </p>
 
 
 </div>

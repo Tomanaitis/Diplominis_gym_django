@@ -1,34 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<h1>Vilnius Gym</h1>
-<hr>
-<h2>Statistics:</h2>
-<hr>
-<h4>Number of trainers: {{ num_trainers_t }}</h4>
-<hr>
-<h4>Number of available training sessions: {{ num_training_sessions_t }}</h4>
-<hr>
-<h4>Membership options: {{ num_memberships_t }}</h4>
-<hr>
-{% if user.username %}
+<div class="container mt-5 shadow rounded" style="background-color: white; padding: 1rem; max-width: 1200px;">
+    <h1>Kaykay Gym</h1>
+    <hr>
+    <h2>Statistics:</h2>
+    <hr>
+    <h4>Number of trainers: {{ num_trainers_t }}</h4>
+    <hr>
+    <h4>Number of available training sessions: {{ num_training_sessions_t }}</h4>
+    <hr>
+    <h4>Membership options: {{ num_memberships_t }}</h4>
+    <hr>
+    {% if user.username %}
     <h6>Welcome, {{ user.username }}</h6>
-{% else %}
+    {% else %}
     <h6>Welcome, guest</h6>
-{% endif %}
-<hr>
-<h6>Your visits: {{ num_visits_t }} </h6>
-<hr>
-
-
-{% for group in user.groups.all %}
-    {% if group.name == 'staff' %}
-        <p>{{user}} belongs to staff</p>
-    {% elif group.name == 'member' %}
-        <p>{{user}} belongs to gym members</p>
     {% endif %}
-{% endfor %}
-
-
+    <hr>
+    <h6>Your visits: {{ num_visits_t }} </h6>
+    <hr>
+    {% for group in user.groups.all %}
+    {% if group.name == 'staff' %}
+    <p>{{user}} belongs to staff</p>
+    {% elif group.name == 'member' %}
+    <p>{{user}} belongs to gym members</p>
+    {% endif %}
+    {% endfor %}
+</div>
 {% endblock %}

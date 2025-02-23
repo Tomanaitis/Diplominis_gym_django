@@ -2,26 +2,27 @@
 {% load static %}
 {% block content %}
 <div class="container my-5">
-  <h1 class="mb-4 text-center">Vilnius Gym Available Training Sessions</h1>
-  <div class="row">
-    {% for trainingsession in trainingsession_list %}
-      <div class="col-md-4 mb-4">
-        <div class="card h-100 shadow">
-          {% if trainingsession.ts_cover %}
-            <img src="{{ trainingsession.ts_cover.url }}" class="card-img-top" alt="{{ trainingsession.name }}">
-          {% else %}
-            <img src="{% static 'img/no-image.png' %}" class="card-img-top" alt="No image available">
-          {% endif %}
-          <div class="card-body">
-            <h5 class="card-title">{{ trainingsession.name }}</h5>
-          </div>
-          <div class="card-footer bg-transparent border-top-0">
-            <a href="{% url 'trainingsession-one' trainingsession.id %}" class="btn btn-primary btn-block">View Session</a>
-          </div>
+    <h1 class="mb-4 text-center">Vilnius Gym Available Training Sessions</h1>
+    <div class="row">
+        {% for trainingsession in trainingsession_list %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow">
+                {% if trainingsession.ts_cover %}
+                <img src="{{ trainingsession.ts_cover.url }}" class="card-img-top" alt="{{ trainingsession.name }}">
+                {% else %}
+                <img src="{% static 'img/no-image.png' %}" class="card-img-top" alt="No image available">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ trainingsession.name }}</h5>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                    <a href="{% url 'trainingsession-one' trainingsession.id %}" class="btn btn-primary btn-block">View
+                        Session</a>
+                </div>
+            </div>
         </div>
-      </div>
-    {% endfor %}
-  </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
 

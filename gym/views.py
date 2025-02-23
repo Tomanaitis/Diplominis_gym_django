@@ -70,13 +70,6 @@ class DisplayMembershipDetailView(generic.DetailView):
     template_name = 'display_membership.html'
 
 
-class TrainerListView(generic.ListView):
-    model = Trainer
-    context_object_name = 'trainer_list'
-    template_name = 'trainers.html'
-    paginate_by = 3
-
-
 class TrainingSessionListView(generic.ListView):
     model = TrainingSession
     context_object_name = 'trainingsession_list'
@@ -91,7 +84,7 @@ class TrainingSessionDetailView(generic.edit.FormMixin, generic.DetailView):
 
     def post(self, request, *args, **kwargs):
         """
-        skirta tik darbui su paciu post uzsklausa
+        Intended only for working with the post request itself.
         """
         form = self.get_form()  # TrainingSessionReviewForm instance
         if form.is_valid():
@@ -101,7 +94,7 @@ class TrainingSessionDetailView(generic.edit.FormMixin, generic.DetailView):
 
     def form_valid(self, form):
         """
-        skirtas duomenu issaugojimui is views is formos gautu, validacijos metu mes irasom training sessiona ir useri
+        Intended for saving data received from the form in views. During validation, we record the training session and the user.
         """
         self.training_session_object = self.get_object()  #
         form.instance.training_session = self.training_session_object
@@ -130,12 +123,21 @@ class PaymentsListView(generic.ListView):
 
 def search(request):
     query_text = request.GET.get('search_text')
-    search_results = Trainer.objects.filter(
+
+    trainer_results = Trainer.objects.filter(
         Q(last_name__icontains=query_text)
         | Q(specialization__icontains=query_text)
     )
-    context = {'query_text': query_text,
-               'trainer_list': search_results}
+
+    session_results = TrainingSession.objects.filter(
+        Q(name__icontains=query_text)
+    )
+
+    context = {
+        'query_text': query_text,
+        'trainer_list': trainer_results,
+        'session_list': session_results,
+    }
     return render(request, 'search_results.html', context=context)
 
 

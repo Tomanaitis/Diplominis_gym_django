@@ -1,83 +1,88 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div class="container mt-5">
-  <h1 class="mb-3">Training Session Detail</h1>
-  <h2 class="mb-3">{{ trainingsession.name }}</h2>
-  <hr>
-  <div class="">
-    {% if trainingsession.ts_cover %}
-      <img src="{{ trainingsession.ts_cover.url }}" class="img-fluid" alt="{{ trainingsession.name }}">
-    {% else %}
-      <img src="{% static 'img/no-image.png' %}" class="img-fluid" alt="No image available">
-    {% endif %}
-  </div>
-  <div class="mb-4">
-    <hr>
-    <h5>{{ trainingsession.description|safe }}</h5>
-  </div>
 
-  {% if user.is_authenticated %}
-    <hr>
-    <div class="mb-4">
-      <h4>Upcoming Classes</h4>
-      {% for schedule in trainingsession.schedule.all %}
-        <p>
-          {{ schedule.date }} from {{ schedule.start_time }} to {{ schedule.end_time }}<br>
-          Trainer: {{ schedule.trainer.first_name }} {{ schedule.trainer.last_name }}<br>
-          Specialization: {{ schedule.trainer.specialization }}<br>
 
-          Location:
-          <span class="font-weight-bold
-            {% if schedule.location == '1' %}text-primary
-            {% elif schedule.location == '2' %}text-success
-            {% elif schedule.location == '3' %}text-info
-            {% elif schedule.location == '4' %}text-warning
-            {% elif schedule.location == '5' %}text-danger
-            {% else %}text-muted{% endif %}">
-            {{ schedule.get_location_display }}
-          </span>
-        </p>
-      {% empty %}
-        <p class="text-muted">No upcoming classes available.</p>
-      {% endfor %}
-    </div>
-    <hr>
-    <div class="mb-4">
-      <h5>Leave a Review</h5>
-      <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-          {{ form.content }}
+<div class="row">
+    <div class="container mt-5 shadow rounded" style="background-color: pink; padding: 1rem; max-width: 1200px;">
+        <h1 class="mb-3">Training Session Detail</h1>
+        <h2 class="mb-3">{{ trainingsession.name }}</h2>
+        <hr>
+        <div class="mb-3">
+            {% if trainingsession.ts_cover %}
+            <img src="{{ trainingsession.ts_cover.url }}" class="card-img-top" style="max-width: 500px;"
+                 alt="{{ trainingsession.name }}">
+            {% else %}
+            <img src="{% static 'img/no-image.png' %}" class="card-img-top" style="max-width: 500px;"
+                 alt="No image available">
+            {% endif %}
         </div>
-        <button type="submit" class="btn btn-outline-success btn-sm">Save comment</button>
-      </form>
-    </div>
-  {% endif %}
+        <div class="mb-4">
+            <hr>
+            <h5>{{ trainingsession.description|safe }}</h5>
+        </div>
+        <hr>
+        <div class="mb-4">
+            <h4>Upcoming Classes</h4>
+            {% for schedule in trainingsession.schedule.all %}
+            <p>
+                {{ schedule.date }} from {{ schedule.start_time }} to {{ schedule.end_time }}<br>
+                Trainer: {{ schedule.trainer.first_name }} {{ schedule.trainer.last_name }}<br>
+                Specialization: {{ schedule.trainer.specialization }}<br>
 
-  <hr>
-  <div>
-    <h4>Reviews</h4>
-    {% for review in trainingsession.trainingsessionreview_set.all %}
-      <div class="mb-3 p-3 bg-light">
-        <small>
-          <strong>{{ review.reviewer }}</strong> <em>{{ review.date_created }}</em>
-        </small>
-        <p>{{ review.content }}</p>
-
-        {% for group in user.groups.all %}
-        {% if group.name == 'staff' %}
-        <a class="btn btn-danger btn-sm" href="{% url 'reviews-delete' review.id %}">Delete</a>
+                Location:
+                <span class="font-weight-bold
+              {% if schedule.location == '1' %}text-primary
+              {% elif schedule.location == '2' %}text-success
+              {% elif schedule.location == '3' %}text-info
+              {% elif schedule.location == '4' %}text-warning
+              {% elif schedule.location == '5' %}text-danger
+              {% else %}text-muted{% endif %}">
+              {{ schedule.get_location_display }}
+            </span>
+            </p>
+            {% empty %}
+            <p class="text-muted">No upcoming classes available.</p>
+            {% endfor %}
+        </div>
+        <hr>
+        {% if user.is_authenticated %}
+        <div class="mb-4">
+            <h5>Leave a Review</h5>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.content }}
+                </div>
+                <button type="submit" class="btn btn-outline-success btn-sm">Save comment</button>
+            </form>
+        </div>
         {% endif %}
-    {% endfor %}
 
-      </div>
-    {% empty %}
-      <p class="text-muted">Training session has no reviews...</p>
-    {% endfor %}
-  </div>
+        <hr>
+        <div>
+            <h4>Reviews</h4>
+            {% for review in trainingsession.trainingsessionreview_set.all %}
+            <div class="mb-3 p-3 bg-light">
+                <small>
+                    <strong>{{ review.reviewer }}</strong> <em>{{ review.date_created }}</em>
+                </small>
+                <p>{{ review.content }}</p>
+
+                {% for group in user.groups.all %}
+                {% if group.name == 'staff' %}
+                <a class="btn btn-danger btn-sm" href="{% url 'reviews-delete' review.id %}">Delete</a>
+                {% endif %}
+                {% endfor %}
+
+            </div>
+            {% empty %}
+            <p class="text-muted">Training session has no reviews...</p>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <a href="{% url 'trainingsessions-all' %}" class="btn btn-primary">Back</a>
+    <hr>
 </div>
-<hr>
-<a href="{% url 'trainingsessions-all' %}" class="btn btn-primary">Back</a>
-<hr>
 {% endblock %}

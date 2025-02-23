@@ -1,18 +1,41 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-<h1>Search results</h1>
-<h4>For what you looked for:  <b><i>{{ query_text }}</i></b> rezults:</h4>
-{% if trainer_list %}
-<ul>
-    {% for trainer in trainer_list %}
+
+<div class="container mt-5 shadow rounded" style="background-color: white; padding: 1rem; max-width: 1200px;">
+    <h1>Search results</h1>
+    <h4>For what you looked for: <b><i>{{ query_text }}</i></b> rezults:</h4>
+    {% if trainer_list %}
+    <hr>
+    <ul>
+        {% for trainer in trainer_list %}
         <li>
+            <h5>Trainer</h5>
             <a href="{% url 'trainer-one' trainer.id %}">
-                {{ trainer.last_name }}
+                <h4>{{ trainer.last_name }} {{ trainer.first_name }}</h4>
+            </a>
+            <a>Specialization: {{ trainer.specialization }}
+                <hr>
             </a>
         </li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>Nothing was found..</p>
-{% endif %}
+        {% endfor %}
+
+    </ul>
+    {% endif %}
+    {% if session_list %}
+    <ul>
+        {% for session in session_list %}
+        <li>
+            <a href="{% url 'trainingsession-one' session.id %}">
+                <h4>{{ session.name }}</h4>
+            </a>
+            {{ session.description|safe }}
+            <hr>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>Nothing was found..</p>
+    {% endif %}
+</div>
 {% endblock %}

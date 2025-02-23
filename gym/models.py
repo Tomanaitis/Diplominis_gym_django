@@ -16,11 +16,12 @@ class Profile(models.Model):
     """
     Class representig user profile
     """
+
     picture = models.ImageField(upload_to='profile_pics', default='default-user.png')
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     phone_number = models.CharField('Phone Number',
                                     max_length=20,
-                                    help_text='Enter your phone number',
+                                    help_text='Enter your phone number for news letters and notifications',
                                     blank=True,
                                     null=True)
 
@@ -44,20 +45,6 @@ class Membership(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='membership')
     start_date = models.DateField('Start_date', help_text="Enter start date", default=date.today)
     end_date = models.DateField('End_date', help_text="Enter end date", default=date.today)
-
-    # TYPE_STATUS = (
-    #     ('B', 'Basic'),
-    #     ('F', 'Flexible'),
-    #     ('P', 'Premium'),
-    #     ('T', 'Trial'),
-    # )
-    # membership_type = models.CharField('type',
-    #                                    max_length=1,
-    #                                    choices=TYPE_STATUS,
-    #                                    default='T',
-    #                                    blank=True,
-    #                                    help_text="Membership type"
-    #                                    )
 
     STATUS_STATUS = (
         ('p', 'Processing'),
@@ -96,7 +83,7 @@ class Payment(models.Model):
     Payments table class representing one payment
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments')
-    membership = models.ForeignKey(Membership, on_delete=SET_NULL, null=True, blank=True)
+    membership = models.ForeignKey(Membership, on_delete=SET_NULL, null=True, blank=True, related_name='payment')
     price = models.FloatField('Price EUR', help_text='Enter payment price')
     payment_date = models.DateField('Payment_date', help_text="Enter date", default=date.today)
 

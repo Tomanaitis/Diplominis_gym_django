@@ -1,22 +1,22 @@
 from django.contrib import admin
 
-from .models import (Membership, Payment, Schedule, TrainerSchedule, Trainer, TrainingSession, Reservation,
+from .models import (Membership, Payment, Schedule, Trainer, TrainingSession, Reservation,
                      Profile, DisplayMembership, TrainingSessionReview)
 
 
 class ScheduleInline(admin.TabularInline):
     model = Schedule
-    extra = 1
+    extra = 0
 
 
 class ReservationsInline(admin.TabularInline):
     model = Reservation
-    extra = 1
+    extra = 0
 
 
-class TrainerScheduleAdmin(admin.ModelAdmin):
-    list_display = ('trainer', 'schedule')
-    inlines = [ReservationsInline]
+class PaymentInLine(admin.TabularInline):
+    model = Payment
+    extra = 0
 
 
 class TrainingSessionAdmin(admin.ModelAdmin):
@@ -36,16 +36,19 @@ class ScheduleAdmin(admin.ModelAdmin):
     list_editable = ('start_time', 'end_time', 'trainer', 'training_session', 'location', 'max_capacity')
     search_fields = ('date', 'trainer')
     inlines = [ReservationsInline]
+    ordering = ('date', 'start_time')
 
 
 class MembershipAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'name', 'start_date', 'end_date', 'membership_status')
     list_editable = ('start_date', 'end_date', 'name', 'membership_status')
+    inlines = [PaymentInLine]
 
 
 class ReservationsAdmin(admin.ModelAdmin):
     list_display = ('user', 'rezervation_status', 'schedule')
     list_editable = ('rezervation_status', 'schedule')
+    ordering = ('schedule', 'rezervation_status')
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -56,6 +59,7 @@ class ProfileAdmin(admin.ModelAdmin):
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ('user', 'payment_date', 'membership', 'price', 'payment_status')
     list_editable = ('payment_date', 'membership', 'price', 'payment_status')
+    ordering = ('payment_date', 'user')
 
 
 class DisplayMembershipAdmin(admin.ModelAdmin):
