@@ -9,6 +9,10 @@ from django.db.models import SET_NULL
 
 
 def get_current_time():
+    """
+    function for current time
+    :return:
+    """
     return datetime.now().time()
 
 

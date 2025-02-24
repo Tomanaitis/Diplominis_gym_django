@@ -264,3 +264,4 @@ class TrainingSessionReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, g
             if group.name == 'staff':
                 check = True
         return check
+

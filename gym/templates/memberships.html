@@ -10,7 +10,7 @@
                             {% elif user.membership.membership_status == 'a' %}text-success
                             {% elif user.membership.membership_status == 'e' %}text-warning
                             {% else %}text-muted{% endif %}">
-        {{ user.membership.get_membership_status_display }}
+    {{ user.membership.get_membership_status_display }}
     </p>
     <h5>Type: </h5>
     <h6>{{ user.membership.name }}</h6>
