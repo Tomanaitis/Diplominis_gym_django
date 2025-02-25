@@ -2,7 +2,10 @@
 
 {% block content %}
 
-<h1>Logged out successfully.</h1>
-<p><a href="{% url 'login' %}">login</a></p>
-
+<div class="container mt-6 shadow rounded" style="background-color: white; padding: 1rem; max-width: 500px;">
+  <h1>Logged out successfully.</h1>
+    <div class="mt-2">
+        <a href="{% url 'login' %}" class="btn btn-primary">Login </a>
+    </div>
+</div>
 {% endblock %}

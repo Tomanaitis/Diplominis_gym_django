@@ -1,21 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>login to gym member page</h1>
-<form action="{% url 'login' %}" method="post">
-    {% csrf_token %}
-    <table>
-        <tr>
-            <td>Gym member</td>
-            <td>{{ form.username }}</td>
-        </tr>
-        <tr>
-            <td>Password</td>
-            <td>{{ form.password }}</td>
-        </tr>
-    </table>
-    <input type="submit" value="log in">
-    <input type="hidden" name="next" value="{{ next }}"/>
-</form>
-<p><a href="{% url 'password_reset' %}">Forgot password?</a></p>
+<div class="container mt-6 shadow rounded" style="background-color: white; padding: 1rem; max-width: 500px;">
+    <h1>login to gym member page</h1>
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>Gym member</td>
+                <td>{{ form.username }}</td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td>{{ form.password }}</td>
+            </tr>
+        </table>
+        <input type="submit" value="log in">
+        <input type="hidden" name="next" value="{{ next }}"/>
+    </form>
+    <p><a href="{% url 'password_reset' %}">Forgot password?</a></p>
+</div>
+
 {% endblock %}
