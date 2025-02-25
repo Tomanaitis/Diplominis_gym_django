@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-from .models import TrainingSession, Membership, Trainer, DisplayMembership, Reservation, Payment, TrainingSessionReview
+from .models import (TrainingSession, Membership, Trainer, DisplayMembership,
+                     Reservation, Payment, TrainingSessionReview, Schedule)
 from .forms import ProfileUpdateForm, UserUpdateForm, TrainingSessionReviewForm
 from .utils import check_password
 
@@ -265,3 +266,20 @@ class TrainingSessionReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, g
                 check = True
         return check
 
+
+@login_required
+def reserve_training_session(request, schedule_id):
+    """
+    Reserves the logged-in user for a specific training session schedule.
+    """
+    schedule = get_object_or_404(Schedule, id=schedule_id)
+    Reservation.objects.create(user=request.user, schedule=schedule)
+    return redirect('reservation-success')
+
+
+@login_required
+def reservation_success(request):
+    """
+    Displays a success message after successful reservation.
+    """
+    return render(request, 'reservation_success.html')

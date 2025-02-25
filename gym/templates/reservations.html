@@ -12,8 +12,7 @@
                 <h6 class="card-subtitle mb-2 text-muted">Trainer: {{ reservation.schedule.trainer }}</h6>
                 <p class="card-text">
                     <strong>Date:</strong> {{ reservation.schedule.date }}<br>
-                    <strong>Time:</strong> {{ reservation.schedule.start_time }} - {{ reservation.schedule.end_time
-                    }}<br>
+                    <strong>Time:</strong> {{ reservation.schedule.start_time }} - {{ reservation.schedule.end_time }}<br>
                     <strong>Location:</strong>
                     <span class="font-weight-bold
                 {% if reservation.schedule.location == '1' %}text-default
@@ -41,5 +40,6 @@
 </div>
 {% else %}
 <p>No reservations found.</p>
+
 {% endif %}
 {% endblock %}

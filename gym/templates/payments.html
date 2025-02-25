@@ -10,15 +10,15 @@
             <div class="card-body">
                 <h5 class="card-title">{{ payment.user }}</h5>
                 <p class="card-text">
-                    <strong>Payment Date:</strong> {{ payment.payment_date }}<br>
-                    <strong>Membership:</strong> {{ payment.membership }}<br>
-                    <strong>Price:</strong> {{ payment.price }} EUR<br>
-                    <strong>Status:</strong> {{ payment.get_payment_status_display }}<br>
-                    <strong>Overdue:</strong>
+                      <strong>Payment Date:</strong> {{ payment.payment_date }}<br>
+                      <strong>Membership:</strong> {{ payment.membership }}<br>
+                      <strong>Price:</strong> {{ payment.price }} EUR<br>
+                      <strong>Status:</strong> {{ payment.get_payment_status_display }}<br>
+                      <strong>Overdue:</strong>
                     {% if payment.is_overdue %}
-                    <span class="text-danger">Overdue</span>
+                      <span class="text-danger">Overdue</span>
                     {% else %}
-                    <span class="text-success">Not overdue</span>
+                      <span class="text-success">Not overdue</span>
                     {% endif %}
                 </p>
                 <a href="https://www.swedbank.lt/private" class="btn btn-primary btn-block">Pay by Swedbank</a>

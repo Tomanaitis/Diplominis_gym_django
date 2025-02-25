@@ -16,5 +16,6 @@ urlpatterns = [
     path('payment/', views.PaymentsListView.as_view(), name='payments-all'),
     path('menberships/', views.MembershipListView.as_view(), name='memberships-all'),
     path('trainingsession/reviews/<int:pk>', views.TrainingSessionReviewDeleteView.as_view(), name='reviews-delete'),
-
+    path('reserversession/<int:schedule_id>/', views.reserve_training_session, name='reserve-session'),
+    path('reservation-success/', views.reservation_success, name='reservation-success'),
 ]

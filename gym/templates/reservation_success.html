@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-6 shadow rounded" style="background-color: white; padding: 1rem; max-width: 500px;">
+    <h1> Reservation submited ! </h1>
+       <h5>Please check reservation status later</h5>
+      <div>
+          <a href="{% url 'reservations-all' %}" class="btn btn-success">My Reservations </a>
+      </div>
+    <div class="mt-2">
+        <a href="{% url 'trainingsessions-all' %}" class="btn btn-primary">Training sessions </a>
+    </div>
+</div>
+
+{% endblock %}

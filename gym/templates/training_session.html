@@ -10,7 +10,7 @@
             <hr>
             <div class="mb-3">
                 {% if trainingsession.ts_cover %}
-                <img src="{{ trainingsession.ts_cover.url }}" class="card-img-top" style="max-width: 500px;"
+                <img src="{{ trainingsession.ts_cover.url }}" class="card-img-top" style="max-width: 500px"
                      alt="{{ trainingsession.name }}">
                 {% else %}
                 <img src="{% static 'img/no-image.png' %}" class="card-img-top" style="max-width: 500px;"
@@ -42,11 +42,26 @@
                       {{ schedule.get_location_display }}
                     </span>
                     </p>
+                    {% if user.is_authenticated %}
+                      <div>
+                          <a href="{% url 'reserve-session' schedule.id %}" class="btn btn-primary">Make a reservation</a>
+                      </div>
+                    {% endif %}
                 </div>
                 {% empty %}
                 <p class="text-muted">No upcoming classes available.</p>
                 {% endfor %}
             </div>
+            {% if user.is_authenticated %}
+            <div class="mb-3">
+                <a>All reservations must be rewieved by KayKay Gyms administration</a>
+            </div>
+
+            <div>
+                <a href="{% url 'reservations-all' %}" class="btn btn-success">My Reservations </a>
+            </div>
+            {% endif %}
+
             <hr>
             {% if user.is_authenticated %}
             <div class="mb-4">
@@ -67,7 +82,7 @@
                 {% for review in trainingsession.trainingsessionreview_set.all %}
                 <div class="mb-3 p-3 bg-light">
                     <small>
-                        <strong>{{ review.reviewer }}</strong> <em>{{ review.date_created }}</em>
+                        <strong>user: {{ review.reviewer }}</strong> <em>{{ review.date_created }}</em>
                     </small>
                     <p>{{ review.content }}</p>
 
