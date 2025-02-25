@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <h1 class="mb-4">Payments</h1>
 {% if user.payments.all %}
 <div class="row">
@@ -30,4 +31,5 @@
 {% else %}
 <p>No payments available.</p>
 {% endif %}
+
 {% endblock %}

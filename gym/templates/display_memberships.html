@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
+
 {% load static %}
+
 {% block content %}
+
 <h1>Available memberhsips:</h1>
 <div class="row">
     {% for display_membership in displaymembership_list %}
@@ -28,4 +31,5 @@
     </div>
     {% endfor %}
 </div>
+
 {% endblock %}

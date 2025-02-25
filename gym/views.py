@@ -283,3 +283,4 @@ def reservation_success(request):
     Displays a success message after successful reservation.
     """
     return render(request, 'reservation_success.html')
+

@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+
 {% load static %}
+
 {% block content %}
 
 <div class="container mt-5 shadow rounded" style="background-color: white; padding: 1rem; max-width: 1200px;">
@@ -19,7 +21,6 @@
             </a>
         </li>
         {% endfor %}
-
     </ul>
     {% endif %}
     {% if session_list %}
@@ -35,7 +36,8 @@
         {% endfor %}
     </ul>
     {% else %}
-    <p>Nothing was found..</p>
+        <p>Nothing was found..</p>
     {% endif %}
 </div>
+
 {% endblock %}

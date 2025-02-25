@@ -1,33 +1,35 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <div class="container mt-5 shadow rounded" style="background-color: white; padding: 1rem; max-width: 600px;">
     <h1>Welcome to Kaykay Gym</h1>
-    <hr>
+        <hr>
     <h2>Information:</h2>
-    <hr>
+        <hr>
     <h4>Number of trainers: {{ num_trainers_t }}</h4>
-    <hr>
+        <hr>
     <h4>Number of available training sessions: {{ num_training_sessions_t }}</h4>
-    <hr>
+        <hr>
     <h4>Membership options: {{ num_memberships_t }}</h4>
-    <hr>
+        <hr>
     {% if user.username %}
-    <a> User information: </a>
-    <hr>
-    <h6>Welcome, {{ user.username }}</h6>
+        <a> User information: </a>
+            <hr>
+        <h6>Welcome, {{ user.username }}</h6>
     {% else %}
-    <h6>Welcome, guest</h6>
+        <h6>Welcome, guest</h6>
     {% endif %}
-    <hr>
+        <hr>
     <h6>Your visits: {{ num_visits_t }} </h6>
-    <hr>
+    <   hr>
     {% for group in user.groups.all %}
-    {% if group.name == 'staff' %}
-    <p>{{user}} belongs to staff</p>
-    {% elif group.name == 'member' %}
-    <p>{{user}} belongs to gym members</p>
-    {% endif %}
+        {% if group.name == 'staff' %}
+            <p>{{user}} belongs to staff</p>
+        {% elif group.name == 'member' %}
+            <p>{{user}} belongs to gym members</p>
+        {% endif %}
     {% endfor %}
 </div>
+
 {% endblock %}

@@ -2,6 +2,7 @@ This is a Django-based web application designed for gym management.
 
 It allows clients to easily access information about memberships,
 trainers, training sessions, payments, and reservations.
+Also for clients to make reservations on training session of their choosing
 Additionally, it provides an admin panel for comprehensive management of gym operations.
 
 Features:

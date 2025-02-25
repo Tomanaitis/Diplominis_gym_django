@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <h1 class="mb-4">Reservations</h1>
 {% if user.reservations.all %}
 <div class="row">
@@ -42,4 +43,5 @@
 <p>No reservations found.</p>
 
 {% endif %}
+
 {% endblock %}

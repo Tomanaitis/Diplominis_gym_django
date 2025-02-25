@@ -10,14 +10,14 @@ from django.db.models import SET_NULL
 
 def get_current_time():
     """
-    function for current time
+    Returns the current time using the datetime module
     """
     return datetime.now().time()
 
 
 class Profile(models.Model):
     """
-    Class representig user profile
+    Class representig user profile.
     """
 
     picture = models.ImageField(upload_to='profile_pics', default='default-user.png')
@@ -32,6 +32,9 @@ class Profile(models.Model):
         return f'{self.user.username} profile'
 
     def save(self, *args, **kwargs):
+        """
+        Represents a user profile, linked to a user account with a profile picture and optional phone number.
+        """
         super().save(*args, **kwargs)
         img = Image.open(self.picture.path)
         thumb_size = (150, 150)
@@ -41,7 +44,7 @@ class Profile(models.Model):
 
 class Membership(models.Model):
     """
-    class for membership table reprezenting on membership
+    Represents a membership linked to a user.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField('Name', max_length=50, help_text="Trial, Basic, Flexible, Premium", default="Trial")
@@ -69,7 +72,7 @@ class Membership(models.Model):
 
 class DisplayMembership(models.Model):
     """
-    class for membership table reprezenting on membership for display
+    Represents a display version of membership.
     """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField('Name', max_length=50)
@@ -83,7 +86,8 @@ class DisplayMembership(models.Model):
 
 class Payment(models.Model):
     """
-    Payments table class representing one payment
+    Represents a payment record linked to a user and an optional membership,
+    tracking payment amount, date, and status, with an overdue check property.
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments')
     membership = models.ForeignKey(Membership, on_delete=SET_NULL, null=True, blank=True, related_name='payment')
@@ -105,6 +109,9 @@ class Payment(models.Model):
 
     @property
     def is_overdue(self):
+        """
+        Checks if the payment is overdue by comparing the payment date with today's date
+        """
         if self.payment_date and date.today() > self.payment_date:
             return True  # pradelsta
         else:
@@ -116,7 +123,7 @@ class Payment(models.Model):
 
 class Trainer(models.Model):
     """
-    Class representing trainers.
+    Represents a trainer with personal details.
     """
     first_name = models.CharField('Name', max_length=50, help_text='Enter your name')
     last_name = models.CharField('Surname', max_length=50, help_text='Enter your surname')
@@ -134,7 +141,7 @@ class Trainer(models.Model):
 
 class TrainingSession(models.Model):
     """
-    Class respresents tables training session element
+    Represents a training session.
     """
     name = models.CharField('Name', max_length=50, help_text='Enter training sessions name')
     duration = models.DurationField(default="01:00:00", help_text="Default time is 1 hour")
@@ -150,7 +157,8 @@ class TrainingSession(models.Model):
 
 class Schedule(models.Model):
     """
-    Class representing tables schedule
+    Represents a schedule for training sessions, including date, time,
+    trainer, location, and maximum capacity, helping to organize gym classes.
     """
     max_capacity = models.PositiveIntegerField('Capacity', null=True, blank=True,
                                                help_text="Enter max capacity")
@@ -184,18 +192,6 @@ class Schedule(models.Model):
         return f'{self.date}, {self.start_time} {self.end_time} {self.training_session}'
 
 
-class TrainerSchedule(models.Model):
-    """
-    Class representing the trainer's schedule.
-    """
-    schedule = models.ForeignKey(Schedule, on_delete=SET_NULL, null=True, blank=True)
-    trainer = models.ForeignKey(Trainer, on_delete=SET_NULL, null=True, blank=True)
-    training_session = models.ForeignKey(TrainingSession, on_delete=SET_NULL, null=True, blank=True)
-
-    def __str__(self):
-        return f'{self.schedule} {self.training_session}'
-
-
 class Reservation(models.Model):
     """
     Reservations table class representing one reservation
@@ -222,7 +218,7 @@ class Reservation(models.Model):
 
 class TrainingSessionReview(models.Model):
     """
-    Class for user reviews
+    Represents user reviews for training sessions.
     """
     date_created = models.DateTimeField(auto_now_add=True)
     content = models.TextField('Review', max_length=2000)

@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+
 {% load static %}
+
 {% block content %}
 
 <div class="mb-4">
@@ -30,7 +32,6 @@
                         {{ schedule.date }} from {{ schedule.start_time }} to {{ schedule.end_time }}<br>
                         Trainer: {{ schedule.trainer.first_name }} {{ schedule.trainer.last_name }}<br>
                         Specialization: {{ schedule.trainer.specialization }}<br>
-
                         Location:
                         <span class="font-weight-bold
                       {% if schedule.location == '1' %}text-primary
@@ -56,12 +57,10 @@
             <div class="mb-3">
                 <a>All reservations must be rewieved by KayKay Gyms administration</a>
             </div>
-
             <div>
                 <a href="{% url 'reservations-all' %}" class="btn btn-success">My Reservations </a>
             </div>
             {% endif %}
-
             <hr>
             {% if user.is_authenticated %}
             <div class="mb-4">
@@ -75,7 +74,6 @@
                 </form>
             </div>
             {% endif %}
-
             <hr>
             <div>
                 <h4>Reviews</h4>
@@ -85,13 +83,11 @@
                         <strong>user: {{ review.reviewer }}</strong> <em>{{ review.date_created }}</em>
                     </small>
                     <p>{{ review.content }}</p>
-
                     {% for group in user.groups.all %}
                     {% if group.name == 'staff' %}
                     <a class="btn btn-danger btn-sm" href="{% url 'reviews-delete' review.id %}">Delete</a>
                     {% endif %}
                     {% endfor %}
-
                 </div>
                 {% empty %}
                 <p class="text-muted">Training session has no reviews...</p>
@@ -103,4 +99,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}
