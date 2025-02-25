@@ -277,7 +277,6 @@ def reserve_training_session(request, schedule_id):
     return redirect('reservation-success')
 
 
-
 @login_required
 def reservation_success(request):
     """
